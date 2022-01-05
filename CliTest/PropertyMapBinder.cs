@@ -78,6 +78,17 @@ namespace System.CommandLine.PropertyMapBinder
             });
         }
 
+        public static ICommandHandler FromPropertyMap<InputContract, T>(Func<InputContract, T> handler, IEnumerable<Func<InputContract, InvocationContext, InputContract>> setters) where InputContract : new()
+        {
+
+            return new AnonymousCommandHandler(context =>
+            {
+                InputContract inputContract = new();
+                InputContract filledContract = setters.Aggregate(inputContract, (aggContract, setter) => setter(aggContract, context));
+
+                handler(filledContract);
+            });
+        }
 
     }
 

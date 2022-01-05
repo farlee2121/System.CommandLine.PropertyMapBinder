@@ -30,7 +30,7 @@ namespace System.CommandLine.PropertyMapBinder.CliTest
             return rootCommand.Invoke(argv);
         }
 
-        public static void SuchHandler(SuchInput input)
+        public static async Task SuchHandler(SuchInput input)
         {
             Console.WriteLine($"printme: {input.PrintMe}; \nfrequency: {input.Frequency}");
         }
