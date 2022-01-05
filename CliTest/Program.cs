@@ -19,7 +19,7 @@ namespace System.CommandLine.PropertyMapBinder.CliTest
                 frequencyArg
             };
 
-            rootCommand.Handler = CommandHandler.FromPropertyMap(SuchHandler, new[]
+            rootCommand.Handler = CommandHandler.FromPropertyMap(SuchHandler, new BinderPipeline<SuchInput>
             {
                 //TODO: see if I can use a delegate to improve the list expected type and get better type inference on these individual methods
                 PropertyMap.FromName<SuchInput, string>("print-me", (contract, val) => {contract.PrintMe = val; return contract; }),

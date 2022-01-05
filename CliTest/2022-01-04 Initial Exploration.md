@@ -18,7 +18,7 @@ Possible next steps
     - This has the added benefit that any convention-based approaches don't need the list. They can specify the PropertyMap.ConventionHere direction
 - idea: could use AutoMapper behind the scenes to prove out expression-based setters as a nicer-looking api
   - probably still want to keep an explicit setter overload
-- [ ] See if I can get the handler argument to accept a fully-fledged function
+- [x] See if I can get the handler argument to accept a fully-fledged function
 - [ ]  See if there are tests I could base from in the main project
   - it actually shouldn't be too hard. I mostly need some spys to verify parsed values are correct, make sure alternate aliases are accepted, what happens on errors, etc
   - probably various edge cases i'm not thinking of, but those should mostly be handled by the parser. I just care that I match a parser def to a property
@@ -29,3 +29,8 @@ Possible next steps
 
 No success wrapping the `Func<input, InvocationContext,input>` with an interface. The function will only infer types from it's arguments
 Maybe this would be different with constructors? I'm skeptical though.
+
+`Func` is sealed and can't be inherited. 
+While creating an interface `IPropertyBinder` makes implementation a bit more verbose, It also allows me more flexibility in what gets passed as a binder 
+(i.e. I can create composites, builders, etc)
+- I think it'll be enough for F# that I have a function to construct a func into an IPropertyBinder
