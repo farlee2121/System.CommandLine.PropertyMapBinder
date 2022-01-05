@@ -7,6 +7,7 @@ namespace System.CommandLine.PropertyMapBinder.CliTest
 
     public class Program
     {
+
         public static int Main(string[] argv)
         {
             Argument<string> printMeArg = new Argument<string>("print-me", "gets printed");
@@ -18,10 +19,7 @@ namespace System.CommandLine.PropertyMapBinder.CliTest
                 frequencyArg
             };
 
-            rootCommand.Handler = CommandHandler.FromPropertyMap((SuchInput input) =>
-            {
-                Console.WriteLine($"printme: {input.PrintMe}; \nfrequency: {input.Frequency}");
-            }, new[]
+            rootCommand.Handler = CommandHandler.FromPropertyMap(SuchHandler, new[]
             {
                 //TODO: see if I can use a delegate to improve the list expected type and get better type inference on these individual methods
                 PropertyMap.FromName<SuchInput, string>("print-me", (contract, val) => {contract.PrintMe = val; return contract; }),
@@ -30,6 +28,11 @@ namespace System.CommandLine.PropertyMapBinder.CliTest
 
             //Console.WriteLine("Hello, World!");
             return rootCommand.Invoke(argv);
+        }
+
+        public static void SuchHandler(SuchInput input)
+        {
+            Console.WriteLine($"printme: {input.PrintMe}; \nfrequency: {input.Frequency}");
         }
 
         public class SuchInput {

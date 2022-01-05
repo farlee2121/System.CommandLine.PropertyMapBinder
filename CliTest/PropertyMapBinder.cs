@@ -78,6 +78,7 @@ namespace System.CommandLine.PropertyMapBinder
             });
         }
 
+
     }
 
     internal class AnonymousCommandHandler : ICommandHandler
