@@ -4,6 +4,9 @@ using System.CommandLine.Invocation;
 
 namespace System.CommandLine.PropertyMapBinder
 {
+
+    
+
     public class BinderPipeline<InputContract> : IPropertyBinder<InputContract>, IEnumerable<IPropertyBinder<InputContract>>
     {
         private List<IPropertyBinder<InputContract>> _setters = new ();
@@ -38,6 +41,27 @@ namespace System.CommandLine.PropertyMapBinder
         IEnumerator IEnumerable.GetEnumerator()
         {
             return _setters.GetEnumerator();
+        }
+
+    }
+
+    public static class BinderPipelineExtensions
+    {
+        public static BinderPipeline<InputContract> AddByName<InputContract, TProperty>(this BinderPipeline<InputContract> pipeline, string name, Func<InputContract, TProperty, InputContract> setter)
+        {
+            pipeline.Add(PropertyMap.FromName(name, setter));
+            return pipeline;
+        }
+
+        public static BinderPipeline<InputContract> AddByReference<InputContract, TProperty>(this BinderPipeline<InputContract> pipeline, Argument<TProperty> argRef, Func<InputContract, TProperty, InputContract> setter)
+        {
+            pipeline.Add(PropertyMap.FromReference(argRef, setter));
+            return pipeline;
+        }
+        public static BinderPipeline<InputContract> AddByReference<InputContract, TProperty>(this BinderPipeline<InputContract> pipeline, Option<TProperty> argRef, Func<InputContract, TProperty, InputContract> setter)
+        {
+            pipeline.Add(PropertyMap.FromReference(argRef, setter));
+            return pipeline;
         }
     }
 }

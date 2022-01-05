@@ -19,12 +19,16 @@ namespace System.CommandLine.PropertyMapBinder.CliTest
                 frequencyArg
             };
 
-            rootCommand.Handler = CommandHandler.FromPropertyMap(SuchHandler, new BinderPipeline<SuchInput>
-            {
-                //TODO: see if I can use a delegate to improve the list expected type and get better type inference on these individual methods
-                PropertyMap.FromName<SuchInput, string>("print-me", (contract, val) => {contract.PrintMe = val; return contract; }),
-                PropertyMap.FromName<SuchInput, int>("-f", (contract, val) => {contract.Frequency = val; return contract; })
-            });
+            rootCommand.Handler = CommandHandler.FromPropertyMap(SuchHandler, 
+                    new BinderPipeline<SuchInput>()
+                    .AddByReference(printMeArg, (contract, val) => { contract.PrintMe = val; return contract; })
+                    .AddByReference(frequencyArg, (contract, val) => { contract.Frequency = val; return contract; })
+                );
+            //{
+            //    //TODO: see if I can use a delegate to improve the list expected type and get better type inference on these individual methods
+            //    PropertyMap.FromName<SuchInput, string>("print-me", (contract, val) => {contract.PrintMe = val; return contract; }),
+            //    PropertyMap.FromName<SuchInput, int>("-f", (contract, val) => {contract.Frequency = val; return contract; })
+            //});
 
             //Console.WriteLine("Hello, World!");
             return rootCommand.Invoke(argv);
