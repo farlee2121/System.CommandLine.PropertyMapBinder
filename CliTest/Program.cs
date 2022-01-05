@@ -9,7 +9,6 @@ namespace System.CommandLine.PropertyMapBinder.CliTest
     {
         public static int Main(string[] argv)
         {
-            argv = new[] { "such print" };
             Argument<string> printMeArg = new Argument<string>("print-me", "gets printed");
             Option<int> frequencyArg = new Option<int>(new string[] { "--frequency", "-f" }, "such description");
 
