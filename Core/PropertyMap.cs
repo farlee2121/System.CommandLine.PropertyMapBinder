@@ -1,5 +1,6 @@
 ﻿using System.CommandLine.Invocation;
-
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace System.CommandLine.PropertyMapBinder
 {
@@ -18,15 +19,18 @@ namespace System.CommandLine.PropertyMapBinder
         }
         private static InputContract NullPropertySetter<InputContract>(InputContract input, InvocationContext invocationContext) => input;
 
+        private static Symbol? GetSymbolForCurrentCommand(InvocationContext context, string name)
+        {
+            var executedCommand = context.ParseResult.CommandResult.Symbol;
+            Symbol? matchingSymbolResult = executedCommand.Children.FirstOrDefault(symbol => IsAliasMatch(symbol, name));
+            return matchingSymbolResult;
+        }
+
         public static IPropertyBinder<InputContract> FromName<InputContract, TProperty>(string name, Func<InputContract, TProperty, InputContract> setter)
         {
             return PropertyBinder.FromFunc((InputContract inputContract, InvocationContext context) =>
             {
-                // how are aliases handled?
-                var executedCommand = context.ParseResult.CommandResult.Symbol;
-                Symbol? matchingSymbolResult = executedCommand.Children.FirstOrDefault(symbol => IsAliasMatch(symbol, name));
-
-                IPropertyBinder<InputContract> mapFn = matchingSymbolResult switch
+                IPropertyBinder<InputContract> mapFn = GetSymbolForCurrentCommand(context, name) switch
                 {
                     null => throw new ArgumentException($"No input symbol for alias {name}"),
                     Argument<TProperty> argRef => FromReference(argRef, setter),
@@ -41,7 +45,7 @@ namespace System.CommandLine.PropertyMapBinder
         {
             return PropertyBinder.FromFunc((InputContract inputContract, InvocationContext context) =>
             {
-                TProperty propertyValue = context.ParseResult.GetValueForOption<TProperty>(optionRef);
+                TProperty propertyValue = context.ParseResult.GetValueForOption(optionRef);
                 return setter(inputContract, propertyValue);
             });
         }
@@ -49,8 +53,39 @@ namespace System.CommandLine.PropertyMapBinder
         {
             return PropertyBinder.FromFunc((InputContract inputContract, InvocationContext context) =>
             {
-                TProperty propertyValue = context.ParseResult.GetValueForArgument<TProperty>(argumentRef);
+                TProperty propertyValue = context.ParseResult.GetValueForArgument(argumentRef);
                 return setter(inputContract, propertyValue);
+            });
+        }
+
+        public static IPropertyBinder<InputContract> FromReference<InputContract, TProperty>(Argument<TProperty> argumentRef, Expression<Func<InputContract, TProperty>> selectorLambda)
+        {
+
+            return FromReference<InputContract, TProperty>(argumentRef, (contract, propertyValue) =>
+            {
+                MemberInfo member = AutoMapper.Internal.ReflectionHelper.FindProperty(selectorLambda);
+                AutoMapper.Internal.ReflectionHelper.SetMemberValue(member, contract, propertyValue);
+                return contract;
+            });
+        }
+
+        public static IPropertyBinder<InputContract> FromReference<InputContract, TProperty>(Option<TProperty> optionRef, Expression<Func<InputContract, TProperty>> selectorLambda)
+        {
+            return FromReference<InputContract, TProperty>(optionRef, (contract, propertyValue) =>
+            {
+                MemberInfo member = AutoMapper.Internal.ReflectionHelper.FindProperty(selectorLambda);
+                AutoMapper.Internal.ReflectionHelper.SetMemberValue(member, contract, propertyValue);
+                return contract;
+            });
+        }
+
+        public static IPropertyBinder<InputContract> FromName<InputContract, TProperty>(string name, Expression<Func<InputContract, TProperty>> selectorLambda)
+        {
+            return FromName<InputContract, TProperty>(name, (contract, propertyValue) =>
+            {
+                MemberInfo member = AutoMapper.Internal.ReflectionHelper.FindProperty(selectorLambda);
+                AutoMapper.Internal.ReflectionHelper.SetMemberValue(member, contract, propertyValue);
+                return contract;
             });
         }
     }

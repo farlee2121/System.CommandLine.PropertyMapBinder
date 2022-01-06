@@ -2,11 +2,15 @@
 
 ## TODO
 - [ ] Add tests
-- [ ] Try a builder to improve type inference
+- [x] Try a builder to improve type inference
 - [ ] experiment with simplified property maps using AutoMapper
 - [ ] Try mixing some conventions with explicit binders (e.g. the name-based convention)
+- [ ] Ensure collection inputs work
 - [ ] Create a readme
 - [ ] Figure out packaging
+
+other
+- [ ] See if I can collapse Argument / Option overloads (problem is Symbol loses type info...)
 
 ## Explorations
 
@@ -54,3 +58,12 @@ While creating an interface `IPropertyBinder` makes implementation a bit more ve
 NEXT: experiment with a builder to see if fewer types need explicitly specified
 - The builder extension can infer the input contract type, but not the property type, which still leaves us with specifying all types
   - This would probably be different if we were using the expression-based approach, because it'd only need to infer one input, then it could infer the property type as the return type
+
+
+What am I trying to achieve right now?
+- I want to set property based on a path expression, not a setter function
+- I think I could get away with just ripping the ReflectionHelper from AutoMapper
+  - https://github.com/AutoMapper/AutoMapper/blob/bdc0120497d192a2741183415543f6119f50a982/src/AutoMapper/Internal/ReflectionHelper.cs#L77
+  - Q: is this OK license-wise
+    - A: yes, it's MIT licensed
+  - Does `FindProperty` also handle fields?

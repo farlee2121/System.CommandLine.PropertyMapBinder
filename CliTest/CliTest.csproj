@@ -8,6 +8,14 @@
     <RootNamespace>System.CommandLine.PropertyMapBinder.CliTest</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="2022-01-03 Declarative wrapper musings.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="2022-01-03 Declarative wrapper musings.md" />
+  </ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="System.CommandLine" Version="2.0.0-beta2.21617.1" />
 	</ItemGroup>
