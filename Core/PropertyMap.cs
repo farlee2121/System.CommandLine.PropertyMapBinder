@@ -17,7 +17,7 @@ namespace System.CommandLine.PropertyMapBinder
             };
 
         }
-        private static InputContract NullPropertySetter<InputContract>(InputContract input, InvocationContext invocationContext) => input;
+        private static InputModel NullPropertySetter<InputModel>(InputModel input, InvocationContext invocationContext) => input;
 
         private static Symbol? GetSymbolForCurrentCommand(InvocationContext context, string name)
         {
@@ -26,23 +26,23 @@ namespace System.CommandLine.PropertyMapBinder
             return matchingSymbolResult;
         }
 
-        public static IPropertyBinder<InputContract> FromName<InputContract, TProperty>(string name, Func<InputContract, TProperty, InputContract> setter)
+        public static IPropertyBinder<InputModel> FromName<InputModel, TProperty>(string name, Func<InputModel, TProperty, InputModel> setter)
         {
-            return PropertyBinder.FromFunc((InputContract inputContract, InvocationContext context) =>
+            return PropertyBinder.FromFunc((InputModel InputModel, InvocationContext context) =>
             {
-                IPropertyBinder<InputContract> mapFn = GetSymbolForCurrentCommand(context, name) switch
+                IPropertyBinder<InputModel> mapFn = GetSymbolForCurrentCommand(context, name) switch
                 {
                     null => throw new ArgumentException($"No input symbol for alias {name}"),
                     Argument<TProperty> argRef => FromReference(argRef, setter),
                     Option<TProperty> argRef => FromReference(argRef, setter),
                     _ => throw new ArgumentException($"Symbol with {name} is not an Option<{typeof(TProperty)} or Arugument<{typeof(TProperty)}>")
                 };
-                return mapFn.Bind(inputContract, context);
+                return mapFn.Bind(InputModel, context);
             });
         }
-        public static IPropertyBinder<InputContract> FromName<InputContract, TProperty>(string name, Expression<Func<InputContract, TProperty>> selectorLambda)
+        public static IPropertyBinder<InputModel> FromName<InputModel, TProperty>(string name, Expression<Func<InputModel, TProperty>> selectorLambda)
         {
-            return FromName<InputContract, TProperty>(name, (contract, propertyValue) =>
+            return FromName<InputModel, TProperty>(name, (contract, propertyValue) =>
             {
                 MemberInfo member = ReflectionHelper.FindProperty(selectorLambda);
                 ReflectionHelper.SetMemberValue(member, contract, propertyValue);
@@ -50,17 +50,17 @@ namespace System.CommandLine.PropertyMapBinder
             });
         }
 
-        public static IPropertyBinder<InputContract> FromReference<InputContract, TProperty>(Option<TProperty> optionRef, Func<InputContract, TProperty, InputContract> setter)
+        public static IPropertyBinder<InputModel> FromReference<InputModel, TProperty>(Option<TProperty> optionRef, Func<InputModel, TProperty, InputModel> setter)
         {
-            return PropertyBinder.FromFunc((InputContract inputContract, InvocationContext context) =>
+            return PropertyBinder.FromFunc((InputModel InputModel, InvocationContext context) =>
             {
                 TProperty propertyValue = context.ParseResult.GetValueForOption(optionRef);
-                return setter(inputContract, propertyValue);
+                return setter(InputModel, propertyValue);
             });
         }
-        public static IPropertyBinder<InputContract> FromReference<InputContract, TProperty>(Option<TProperty> optionRef, Expression<Func<InputContract, TProperty>> selectorLambda)
+        public static IPropertyBinder<InputModel> FromReference<InputModel, TProperty>(Option<TProperty> optionRef, Expression<Func<InputModel, TProperty>> selectorLambda)
         {
-            return FromReference<InputContract, TProperty>(optionRef, (contract, propertyValue) =>
+            return FromReference<InputModel, TProperty>(optionRef, (contract, propertyValue) =>
             {
                 MemberInfo member = ReflectionHelper.FindProperty(selectorLambda);
                 ReflectionHelper.SetMemberValue(member, contract, propertyValue);
@@ -68,19 +68,19 @@ namespace System.CommandLine.PropertyMapBinder
             });
         }
 
-        public static IPropertyBinder<InputContract> FromReference<InputContract, TProperty>(Argument<TProperty> argumentRef, Func<InputContract, TProperty, InputContract> setter)
+        public static IPropertyBinder<InputModel> FromReference<InputModel, TProperty>(Argument<TProperty> argumentRef, Func<InputModel, TProperty, InputModel> setter)
         {
-            return PropertyBinder.FromFunc((InputContract inputContract, InvocationContext context) =>
+            return PropertyBinder.FromFunc((InputModel InputModel, InvocationContext context) =>
             {
                 TProperty propertyValue = context.ParseResult.GetValueForArgument(argumentRef);
-                return setter(inputContract, propertyValue);
+                return setter(InputModel, propertyValue);
             });
         }
 
-        public static IPropertyBinder<InputContract> FromReference<InputContract, TProperty>(Argument<TProperty> argumentRef, Expression<Func<InputContract, TProperty>> selectorLambda)
+        public static IPropertyBinder<InputModel> FromReference<InputModel, TProperty>(Argument<TProperty> argumentRef, Expression<Func<InputModel, TProperty>> selectorLambda)
         {
 
-            return FromReference<InputContract, TProperty>(argumentRef, (contract, propertyValue) =>
+            return FromReference<InputModel, TProperty>(argumentRef, (contract, propertyValue) =>
             {
                 MemberInfo member = ReflectionHelper.FindProperty(selectorLambda);
                 ReflectionHelper.SetMemberValue(member, contract, propertyValue);
