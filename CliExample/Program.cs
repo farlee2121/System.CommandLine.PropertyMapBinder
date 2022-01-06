@@ -24,29 +24,30 @@ namespace System.CommandLine.PropertyMapBinder.CliExample
 
             rootCommand.Handler = CommandHandler.FromPropertyMap(SuchHandler,
                     new BinderPipeline<SuchInput>()
-                    .MapFromName("print-me", contract => contract.PrintMe)
-                    .MapFromName("-l", contract => contract.List)
-                    .MapFromReference(frequencyArg, contract=> contract.Frequency)
+                    .MapFromNameConvention(TextCase.Pascal)
+                    // .MapFromName("print-me", contract => contract.PrintMe)
+                    // .MapFromReference(frequencyArg, contract=> contract.Frequency)
+                    .MapFromName("-l", contract => contract.SuchList)
                 );
-            // rootCommand.Handler = CommandHandler.FromPropertyMap(SuchHandler,
-            //     new BinderPipeline<SuchInput>{
+            //rootCommand.Handler = CommandHandler.FromPropertyMap(SuchHandler,
+            //    new BinderPipeline<SuchInput>{
             //         PropertyMap.FromName<SuchInput, string>("print-me", contract => contract.PrintMe ),
             //         PropertyMap.FromName<SuchInput, int>("-f", contract => contract.Frequency)
-            //     });
+            //    });
 
             return rootCommand.Invoke(argv);
         }
 
         public static async Task SuchHandler(SuchInput input)
         {
-            Console.WriteLine($"printme: {input.PrintMe}; \nfrequency: {input.Frequency}; \nlist:{string.Join(",",input.List)}");
+            Console.WriteLine($"printme: {input.PrintMe}; \nfrequency: {input.Frequency}; \nlist:{string.Join(",",input.SuchList)}");
         }
 
         public class SuchInput {
             public int Frequency { get; set; }
             public string? PrintMe { get; set; }
 
-            public IEnumerable<int> List { get; set; } = Enumerable.Empty<int>();
+            public IEnumerable<int> SuchList { get; set; } = Enumerable.Empty<int>();
 
         }
     }

@@ -5,12 +5,16 @@
 - [x] Try a builder to improve type inference
 - [x] experiment with simplified property maps using AutoMapper
 - [ ] Try mixing some conventions with explicit binders (e.g. the name-based convention)
-- [ ] Ensure collection inputs work
+- [x] Ensure collection inputs work
 - [ ] Create a readme
 - [ ] Figure out packaging
 
-other
-- [ ] See if I can collapse Argument / Option overloads (problem is Symbol loses type info...)
+
+Later
+- [ ] Consider possible errors getting values
+  - `GetValueForHandlerParameter` considers more cases than me
+  - https://github.com/dotnet/command-line-api/blob/446e832ecc07dbd7a7183c55793b27cf81e26f0d/src/System.CommandLine/Handler.cs
+- [ ] See if I can collapse Argument / Option overloads (can still get type information from the property expression)
 
 ## Explorations
 
@@ -67,3 +71,82 @@ What am I trying to achieve right now?
   - Q: is this OK license-wise
     - A: yes, it's MIT licensed
   - Does `FindProperty` also handle fields?
+
+
+## Alternative/convention Binding Strategies
+
+It doesn't look like using portions of System.CommandLine.NamingConventionBinder or AutoMapper will be straight forward.
+
+For this proof of concept, it's probably best I just make something from scratch. All I should need to do is 
+- get the list of arguments and options from `context.ParseResult.CommandResult.Symbol.Children` (needs filtered because sub-commands)
+- get properties and fields with `contract.GetType().GetProperties()` and `contract.GetType().GetFields()`
+- run some kind of normalization process on names and find matches
+  - there's certain to be case transformers out there that can handle kebab case to camel, pascal, or snake case
+  - finding fewer and less commonly used than expected
+  - https://github.com/vad3x/case-extensions should work
+  - Would be pretty easy to give a list of allowed styles, then loop through each transform against the symbol name (to compair against the unaltered member name). If any case match, then just convert both names to some consistent format  
+    - Case.Pascal, Case.Train, Case.Snake, Case.Camel, Case.Any (kebab isn't allowed in C# symbols)
+
+Hmm. I'm not currently considering nesting, but that's a much more advanced scenario not necessary for the proof of concept
+
+!!! This shouldn't end up in core. It should get it's own package if I even want to publish it
+
+This could be much more general in a production case. Instead of passing a casing, pass an IConventionTest or some predicate `symbolInfo -> propertyInfo -> bool`
+Then each casing gets its own predicate. This would probably be easier to understand and extend. It doesn't cost us anything performance-wise.
+It also makes it much easier to add things like prefixes.
+
+`.MapFromNamingConvention(NameConvention.PascalCase)`
+`.MapFromNamingConvention(NameConvention.And(NameConvention.WithPrefix("Input_"), NameConvention.Pascal))`
+- hmm. probably need some way to specify and versus or
+
+!!! I can't extend the static `PropertyMap` class. That means it'd apply for `CommandHandler` too
+- Partial seems to only work within an assembly
+- F# does it somehow with modules...
+
+
+
+## Dependency Injection 
+
+I could see dependency injection as a common ask in the binding pipeline.
+It might be interesting to metion or demonstrate it's possible.
+However, I think the input model and the dependencies should be separate. 
+If anything, input might get bound in the DI process, not dependencies in the input process.
+Thus I think it's more appropriate that the handler internally manages dependency containers.
+
+
+## Input Model Construction
+
+Records and other immutable data types won't want to play well with this mutation pipeline.
+If input models are being kept cleanly separate, then this shouldn't be an issue, but it'll probably come up.
+The user may also want to do validation in the constructor, which isn't possible currently.
+
+It's good to support construction in any case, it solves many potential limitations and scenarios
+- building on existing objects
+- using immutable types
+- 
+
+Some thoughts on implementing
+- the constructor can't be part of the pipeline, it has to come before or we'd still require a default constructor
+
+
+## Collapsing Action/Option overloads
+- pro: fewer overloads to propagate
+- pro: pushes consolidation of my value retrieval strategy and creates one place for handling possible strategy changes, like inherited options
+- con: allows users to pass symbols that aren't valid (e.g. commands)
+- pro: follows the precedent set by other handlers (which take a list of symbols)
+
+
+## Tests I should write
+
+TEST: Given an argument A of type T WHEN I invoke the handler with A value V and A mapped to property P THEN P equals V
+TEST: Given an option O of type T WHEN I invoke the handler with O value V and O mapped to property P THEN P equals V
+TEST: Given an option O of type T with alias ALIAS WHEN I invoke the handler with O value V and O mapped to property P by alias ALIAS THEN P equals V
+- test multiple aliases too. Seems like a good property test
+
+TEST: Same tests as for property, but with fields
+TEST: Make sure many arity options map
+TEST: Verify exception when no such input symbol (both name and reference)
+TEST: Verify that later registrations override earlier ones
+TEST: Verify constructor instantiation equals initializer instantiation
+ 
+

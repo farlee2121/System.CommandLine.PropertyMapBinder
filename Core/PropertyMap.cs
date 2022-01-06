@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace System.CommandLine.PropertyMapBinder
 {
-    public static class PropertyMap
+    public static partial class PropertyMap
     {
         private static bool IsAliasMatch(ISymbol symbol, string alias)
         {
