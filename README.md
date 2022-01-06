@@ -45,9 +45,9 @@ The backbone construct is `BinderPipeline`.
 ```cs
 rootCommand.Handler = CommandHandler.FromPropertyMap(SuchHandler,
     new BinderPipeline<SuchInput>{
-        PropertyMap.FromName<SuchInput, string>("print-me", contract => contract.PrintMe ),
-        PropertyMap.FromReference<SuchInput, int>(frequencyOpt, contract => contract.Frequency),
-        PropertyMap.FromName<SuchInput, IEnumerable<int>>("-l", contract => contract.SuchList)
+        PropertyMap.FromName<SuchInput, string>("print-me", model => model.PrintMe ),
+        PropertyMap.FromReference<SuchInput, int>(frequencyOpt, model => model.Frequency),
+        PropertyMap.FromName<SuchInput, IEnumerable<int>>("-l", model => model.SuchList)
     });
 ```
 
@@ -64,9 +64,9 @@ Binders will still be called in the order registered.
 ```cs
 rootCommand.Handler = CommandHandler.FromPropertyMap(SuchHandler,
     new BinderPipeline<SuchInput>()
-    .MapFromName("print-me", contract => contract.PrintMe)
-    .MapFromReference(frequencyOpt, contract => contract.Frequency)
-    .MapFromName("-l", contract => contract.SuchList)
+    .MapFromName("print-me", model => model.PrintMe)
+    .MapFromReference(frequencyOpt, model => model.Frequency)
+    .MapFromName("-l", model => model.SuchList)
 );
 ```
 
@@ -78,12 +78,12 @@ The pipeline can handle many approaches binding input. Here's an example of a si
 rootCommand.Handler = CommandHandler.FromPropertyMap(SuchHandler,
     new BinderPipeline<SuchInput>()
     .MapFromNameConvention(TextCase.Pascal)
-    .MapFromName("-l", contract => contract.SuchList)
+    .MapFromName("-l", model => model.SuchList)
 );
 ```
 ### Possible extensions to the pipeline
 Here are some cases I haven't implemented, but would be fairly easy to add
-- map default values from configuration
+- map default values from configuration 
 - Ask a user for any missing inputs 
   - can be done with the existing setter overload, but prompts could be automated with a signature like `.PromptIfMissing(name, selector)`
 - match properties based on type
