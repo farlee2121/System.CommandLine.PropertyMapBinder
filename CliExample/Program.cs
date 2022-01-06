@@ -24,9 +24,9 @@ namespace System.CommandLine.PropertyMapBinder.CliExample
 
             rootCommand.Handler = CommandHandler.FromPropertyMap(SuchHandler,
                     new BinderPipeline<SuchInput>()
-                    .AddByName("print-me", contract => contract.PrintMe)
-                    .AddByName("-l", contract => contract.List)
-                    .AddByReference(frequencyArg, contract=> contract.Frequency)
+                    .MapFromName("print-me", contract => contract.PrintMe)
+                    .MapFromName("-l", contract => contract.List)
+                    .MapFromReference(frequencyArg, contract=> contract.Frequency)
                 );
             // rootCommand.Handler = CommandHandler.FromPropertyMap(SuchHandler,
             //     new BinderPipeline<SuchInput>{

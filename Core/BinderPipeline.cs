@@ -47,37 +47,37 @@ namespace System.CommandLine.PropertyMapBinder
 
     public static class BinderPipelineExtensions
     {
-        public static BinderPipeline<InputContract> AddByName<InputContract, TProperty>(this BinderPipeline<InputContract> pipeline, string name, Func<InputContract, TProperty, InputContract> setter)
+        public static BinderPipeline<InputContract> MapFromName<InputContract, TProperty>(this BinderPipeline<InputContract> pipeline, string name, Func<InputContract, TProperty, InputContract> setter)
         {
             pipeline.Add(PropertyMap.FromName(name, setter));
             return pipeline;
         }
 
-        public static BinderPipeline<InputContract> AddByName<InputContract, TProperty>(this BinderPipeline<InputContract> pipeline, string name, Expression<Func<InputContract, TProperty>> selector)
+        public static BinderPipeline<InputContract> MapFromName<InputContract, TProperty>(this BinderPipeline<InputContract> pipeline, string name, Expression<Func<InputContract, TProperty>> selector)
         {
             pipeline.Add(PropertyMap.FromName(name, selector));
             return pipeline;
         }
 
-        public static BinderPipeline<InputContract> AddByReference<InputContract, TProperty>(this BinderPipeline<InputContract> pipeline, Argument<TProperty> argRef, Func<InputContract, TProperty, InputContract> setter)
+        public static BinderPipeline<InputContract> MapFromReference<InputContract, TProperty>(this BinderPipeline<InputContract> pipeline, Argument<TProperty> argRef, Func<InputContract, TProperty, InputContract> setter)
         {
             pipeline.Add(PropertyMap.FromReference(argRef, setter));
             return pipeline;
         }
 
-        public static BinderPipeline<InputContract> AddByReference<InputContract, TProperty>(this BinderPipeline<InputContract> pipeline, Argument<TProperty> argRef, Expression<Func<InputContract, TProperty>> selector)
+        public static BinderPipeline<InputContract> MapFromReference<InputContract, TProperty>(this BinderPipeline<InputContract> pipeline, Argument<TProperty> argRef, Expression<Func<InputContract, TProperty>> selector)
         {
             pipeline.Add(PropertyMap.FromReference(argRef, selector));
             return pipeline;
         }
 
-        public static BinderPipeline<InputContract> AddByReference<InputContract, TProperty>(this BinderPipeline<InputContract> pipeline, Option<TProperty> argRef, Func<InputContract, TProperty, InputContract> setter)
+        public static BinderPipeline<InputContract> MapFromReference<InputContract, TProperty>(this BinderPipeline<InputContract> pipeline, Option<TProperty> argRef, Func<InputContract, TProperty, InputContract> setter)
         {
             pipeline.Add(PropertyMap.FromReference(argRef, setter));
             return pipeline;
         }
 
-        public static BinderPipeline<InputContract> AddByReference<InputContract, TProperty>(this BinderPipeline<InputContract> pipeline, Option<TProperty> optionRef, Expression<Func<InputContract, TProperty>> selector)
+        public static BinderPipeline<InputContract> MapFromReference<InputContract, TProperty>(this BinderPipeline<InputContract> pipeline, Option<TProperty> optionRef, Expression<Func<InputContract, TProperty>> selector)
         {
             pipeline.Add(PropertyMap.FromReference(optionRef, selector));
             return pipeline;
