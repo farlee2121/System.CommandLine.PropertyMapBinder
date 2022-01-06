@@ -3,7 +3,7 @@
 ## TODO
 - [ ] Add tests
 - [x] Try a builder to improve type inference
-- [ ] experiment with simplified property maps using AutoMapper
+- [x] experiment with simplified property maps using AutoMapper
 - [ ] Try mixing some conventions with explicit binders (e.g. the name-based convention)
 - [ ] Ensure collection inputs work
 - [ ] Create a readme
