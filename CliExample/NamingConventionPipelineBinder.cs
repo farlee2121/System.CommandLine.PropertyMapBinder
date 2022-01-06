@@ -101,14 +101,3 @@ namespace System.CommandLine.PropertyMapBinder.CliExample
 
 }
 
-namespace System.CommandLine.PropertyMapBinder
-{
-    using System.CommandLine.PropertyMapBinder.CliExample;
-    public static partial class PropertyMap
-    {
-        public static IPropertyBinder<InputModel> FromNameConvention<InputModel>(TextCase casing)
-        {
-            return new NamingConventionPipelineBinder<InputModel>(casing);
-        }
-    }
-}
