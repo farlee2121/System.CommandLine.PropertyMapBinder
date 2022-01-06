@@ -24,11 +24,11 @@ namespace System.CommandLine.PropertyMapBinder.CliTest
                     .AddByName("print-me", contract => contract.PrintMe)
                     .AddByReference(frequencyArg, contract=> contract.Frequency)
                 );
-            //new BinderPipeline<SuchInput>{
-            //    //TODO: see if I can use a delegate to improve the list expected type and get better type inference on these individual methods
-            //    PropertyMap.FromName<SuchInput, string>("print-me", contract => contract.PrintMe ),
-            //    PropertyMap.FromName<SuchInput, int>("-f", contract => contract.Frequency)
-            //});
+            // rootCommand.Handler = CommandHandler.FromPropertyMap(SuchHandler,
+            //     new BinderPipeline<SuchInput>{
+            //         PropertyMap.FromName<SuchInput, string>("print-me", contract => contract.PrintMe ),
+            //         PropertyMap.FromName<SuchInput, int>("-f", contract => contract.Frequency)
+            //     });
 
             return rootCommand.Invoke(argv);
         }
