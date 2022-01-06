@@ -5,7 +5,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<RootNamespace>System.CommandLine.PropertyMapBinder.CliTest</RootNamespace>
+		<RootNamespace>System.CommandLine.PropertyMapBinder.CliExample</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>
