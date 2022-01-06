@@ -63,8 +63,8 @@ namespace System.CommandLine.PropertyMapBinder
 
             return FromReference<InputContract, TProperty>(argumentRef, (contract, propertyValue) =>
             {
-                MemberInfo member = AutoMapper.Internal.ReflectionHelper.FindProperty(selectorLambda);
-                AutoMapper.Internal.ReflectionHelper.SetMemberValue(member, contract, propertyValue);
+                MemberInfo member = ReflectionHelper.FindProperty(selectorLambda);
+                ReflectionHelper.SetMemberValue(member, contract, propertyValue);
                 return contract;
             });
         }
@@ -73,8 +73,8 @@ namespace System.CommandLine.PropertyMapBinder
         {
             return FromReference<InputContract, TProperty>(optionRef, (contract, propertyValue) =>
             {
-                MemberInfo member = AutoMapper.Internal.ReflectionHelper.FindProperty(selectorLambda);
-                AutoMapper.Internal.ReflectionHelper.SetMemberValue(member, contract, propertyValue);
+                MemberInfo member = ReflectionHelper.FindProperty(selectorLambda);
+                ReflectionHelper.SetMemberValue(member, contract, propertyValue);
                 return contract;
             });
         }
@@ -83,8 +83,8 @@ namespace System.CommandLine.PropertyMapBinder
         {
             return FromName<InputContract, TProperty>(name, (contract, propertyValue) =>
             {
-                MemberInfo member = AutoMapper.Internal.ReflectionHelper.FindProperty(selectorLambda);
-                AutoMapper.Internal.ReflectionHelper.SetMemberValue(member, contract, propertyValue);
+                MemberInfo member = ReflectionHelper.FindProperty(selectorLambda);
+                ReflectionHelper.SetMemberValue(member, contract, propertyValue);
                 return contract;
             });
         }
