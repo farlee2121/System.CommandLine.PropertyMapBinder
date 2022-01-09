@@ -1,5 +1,7 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.CommandLine.Invocation;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace System.CommandLine.PropertyMapBinder

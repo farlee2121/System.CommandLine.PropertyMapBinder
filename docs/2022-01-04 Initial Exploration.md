@@ -4,17 +4,20 @@
 - [ ] Add tests
 - [x] Try a builder to improve type inference
 - [x] experiment with simplified property maps using AutoMapper
-- [ ] Try mixing some conventions with explicit binders (e.g. the name-based convention)
+- [x] Try mixing some conventions with explicit binders (e.g. the name-based convention)
 - [x] Ensure collection inputs work
-- [ ] Create a readme
+- [x] Create a readme
 - [ ] Figure out packaging
+  - maybe wait for more feedback / if they want to pull it into core?
 
-
-Later
+Later 
 - [ ] Consider possible errors getting values
   - `GetValueForHandlerParameter` considers more cases than me
   - https://github.com/dotnet/command-line-api/blob/446e832ecc07dbd7a7183c55793b27cf81e26f0d/src/System.CommandLine/Handler.cs
 - [ ] See if I can collapse Argument / Option overloads (can still get type information from the property expression)
+- [ ] model initialization (handle constructors at least)
+- [ ] Improve naming convention binder
+- [ ] some of the extension cases
 
 ## Explorations
 

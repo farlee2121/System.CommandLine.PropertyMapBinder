@@ -1,5 +1,5 @@
 ﻿using System.CommandLine.Invocation;
-
+using System.Threading.Tasks;
 
 namespace System.CommandLine.PropertyMapBinder
 {

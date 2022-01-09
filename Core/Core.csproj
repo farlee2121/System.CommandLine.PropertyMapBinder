@@ -2,9 +2,22 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-	<RootNamespace>System.CommandLine.PropertyMapBinder</RootNamespace>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+	  <RootNamespace>System.CommandLine.PropertyMapBinder</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>System.CommandLine.PropertyMapBinder</PackageId>
+    <Title>System.CommandLine.PropertyMapBinder</Title>
+    <Version>0.1.0-alpha</Version>
+    <Description>
+      Bind System.CommandLine input to an object model with explicit and convention-based property maps.
+    </Description>
+    <Authors>Spencer Farley</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/farlee2121/System.CommandLine.PropertyMapBinder</RepositoryUrl>
+    <PackageTags>command line;shell;cli;System.CommandLine;System.CommandLine binder</PackageTags>
   </PropertyGroup>
 
 	<ItemGroup>
