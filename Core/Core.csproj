@@ -8,9 +8,9 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageId>System.CommandLine.PropertyMapBinder</PackageId>
+    <PackageId>farlee2121.System.CommandLine.PropertyMapBinder</PackageId>
     <Title>System.CommandLine.PropertyMapBinder</Title>
-    <Version>0.1.0-alpha</Version>
+    <Version>0.1.0-alpha1</Version>
     <Description>
       Bind System.CommandLine input to an object model with explicit and convention-based property maps.
     </Description>
@@ -18,10 +18,15 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/farlee2121/System.CommandLine.PropertyMapBinder</RepositoryUrl>
     <PackageTags>command line;shell;cli;System.CommandLine;System.CommandLine binder</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
 
 	<ItemGroup>
 		<PackageReference Include="System.CommandLine" Version="2.0.0-beta2.21617.1" />
 	</ItemGroup>
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\"/>
+  </ItemGroup>
 
 </Project>
