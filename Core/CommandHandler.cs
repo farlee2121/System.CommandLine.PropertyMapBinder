@@ -19,7 +19,7 @@ namespace System.CommandLine.PropertyMapBinder
             
             return new AnonymousCommandHandler(context =>
             {
-                InputModel inputModel = new();
+                InputModel inputModel = new InputModel();
                 InputModel filledContract = propertyBinder.Bind(inputModel, context);
                 handler(filledContract);
             });
@@ -29,7 +29,7 @@ namespace System.CommandLine.PropertyMapBinder
         {
             return new AnonymousCommandHandler(context =>
             {
-                InputModel inputModel = new();
+                InputModel inputModel = new InputModel();
                 InputModel filledContract = propertyBinder.Bind(inputModel, context);
                 handler(filledContract);
             });

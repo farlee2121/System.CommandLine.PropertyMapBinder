@@ -11,7 +11,7 @@ namespace System.CommandLine.PropertyMapBinder
 
     public class BinderPipeline<InputModel> : IPropertyBinder<InputModel>, IEnumerable<IPropertyBinder<InputModel>>
     {
-        private List<IPropertyBinder<InputModel>> _setters = new ();
+        private List<IPropertyBinder<InputModel>> _setters = new List<IPropertyBinder<InputModel>>();
 
         public BinderPipeline()
         {

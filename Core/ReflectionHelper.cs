@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 namespace System.CommandLine.PropertyMapBinder
 {
     /// <summary>
-    /// Cherry-picked from AutoMapper: https://github.com/AutoMapper/AutoMapper/blob/bdc0120497d192a2741183415543f6119f50a982/src/AutoMapper/Internal/ReflectionHelper.cs
+    /// Cherry-picked from AutoMapper: https://github.com/AutoMapper/AutoMapper/blob/v10.0.0/src/AutoMapper/Internal/ReflectionHelper.cs
+    /// - cleaner versions exist for netstandard2.1+ https://github.com/AutoMapper/AutoMapper/blob/v11.0.0/src/AutoMapper/Internal/ReflectionHelper.cs
     /// </summary>
     internal static class ReflectionHelper
     {
@@ -33,22 +34,41 @@ namespace System.CommandLine.PropertyMapBinder
 
         public static MemberInfo FindProperty(LambdaExpression lambdaExpression)
         {
-            Expression expressionToCheck = lambdaExpression.Body;
-            while (true)
+            Expression expressionToCheck = lambdaExpression;
+
+            var done = false;
+
+            while (!done)
             {
-                switch (expressionToCheck)
+                switch (expressionToCheck.NodeType)
                 {
-                    case MemberExpression { Member: var member, Expression: { NodeType: ExpressionType.Parameter or ExpressionType.Convert } }:
-                        return member;
-                    case UnaryExpression { Operand: var operand }:
-                        expressionToCheck = operand;
+                    case ExpressionType.Convert:
+                        expressionToCheck = ((UnaryExpression)expressionToCheck).Operand;
                         break;
+                    case ExpressionType.Lambda:
+                        expressionToCheck = ((LambdaExpression)expressionToCheck).Body;
+                        break;
+                    case ExpressionType.MemberAccess:
+                        var memberExpression = ((MemberExpression)expressionToCheck);
+
+                        if (memberExpression.Expression.NodeType != ExpressionType.Parameter &&
+                            memberExpression.Expression.NodeType != ExpressionType.Convert)
+                        {
+                            throw new ArgumentException(
+                                $"Expression '{lambdaExpression}' must resolve to top-level member and not any child object's properties. You can use ForPath, a custom resolver on the child type or the AfterMap option instead.",
+                                nameof(lambdaExpression));
+                        }
+
+                        var member = memberExpression.Member;
+
+                        return member;
                     default:
-                        throw new ArgumentException(
-                            $"Expression '{lambdaExpression}' must resolve to top-level member and not any child object's properties. You can use ForPath, a custom resolver on the child type or the AfterMap option instead.",
-                            nameof(lambdaExpression));
+                        done = true;
+                        break;
                 }
             }
+
+            throw new InvalidOperationException("Couldn't resolve a member from given selector.");
         }
     }
 }
