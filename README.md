@@ -1,4 +1,6 @@
-﻿# System.CommandLine.PropertyMapBinding
+﻿
+# System.CommandLine.PropertyMapBinding
+[![](https://badgen.net/nuget/v/farlee2121.System.CommandLine.PropertyMapBinder)](https://www.nuget.org/packages/farlee2121.System.CommandLine.PropertyMapBinder)
 
 ## Motivation / what is this
 This library is an experiment. The goal is to create an intuitive handler binding experience for [System.CommandLine](https://github.com/dotnet/command-line-api).
