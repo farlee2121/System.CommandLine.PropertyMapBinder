@@ -22,13 +22,13 @@ namespace System.CommandLine.PropertyMapBinder.CliExample
                 listOpt
             };
 
-            rootCommand.Handler = CommandHandler.FromPropertyMap(SuchHandler,
-                    new BinderPipeline<SuchInput>()
-                    .MapFromNameConvention(TextCase.Pascal)
-                    // .MapFromName("print-me", contract => contract.PrintMe)
-                    // .MapFromReference(frequencyArg, contract=> contract.Frequency)
-                    .MapFromName("-l", contract => contract.SuchList)
-                );
+            rootCommand.Handler = new BinderPipeline<SuchInput>()
+                                    .MapFromNameConvention(TextCase.Pascal)
+                                    // .MapFromName("print-me", contract => contract.PrintMe)
+                                    // .MapFromReference(frequencyArg, contract=> contract.Frequency)
+                                    .MapFromName("-l", contract => contract.SuchList)
+                                    .ToHandler(SuchHandler);
+                
             //rootCommand.Handler = CommandHandler.FromPropertyMap(SuchHandler,
             //    new BinderPipeline<SuchInput>{
             //         PropertyMap.FromName<SuchInput, string>("print-me", contract => contract.PrintMe ),

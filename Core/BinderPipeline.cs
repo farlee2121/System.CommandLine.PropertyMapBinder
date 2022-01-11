@@ -84,5 +84,15 @@ namespace System.CommandLine.PropertyMapBinder
             pipeline.Add(PropertyMap.FromReference(optionRef, selector));
             return pipeline;
         }
+
+        public static ICommandHandler ToHandler<InputModel, T>(this BinderPipeline<InputModel> pipeline, Func<InputModel,T> handlerFunc) where InputModel : new()
+        {
+            return CommandHandler.FromPropertyMap(handlerFunc, pipeline);
+        }
+
+        public static ICommandHandler ToHandler<InputModel, T>(this BinderPipeline<InputModel> pipeline, Action<InputModel> handlerFunc) where InputModel : new()
+        {
+            return CommandHandler.FromPropertyMap(handlerFunc, pipeline);
+        }
     }
 }

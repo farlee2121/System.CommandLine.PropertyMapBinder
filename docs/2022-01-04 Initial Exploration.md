@@ -7,7 +7,7 @@
 - [x] Try mixing some conventions with explicit binders (e.g. the name-based convention)
 - [x] Ensure collection inputs work
 - [x] Create a readme
-- [ ] Figure out packaging
+- [x] Figure out packaging
   - maybe wait for more feedback / if they want to pull it into core?
 
 Later 

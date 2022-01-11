@@ -64,12 +64,11 @@ We can also build the pipeline through a set of extension methods. The primary b
 Binders will still be called in the order registered.
 
 ```cs
-rootCommand.Handler = CommandHandler.FromPropertyMap(SuchHandler,
-    new BinderPipeline<SuchInput>()
+rootCommand.Handler = new BinderPipeline<SuchInput>()
     .MapFromName("print-me", model => model.PrintMe)
     .MapFromReference(frequencyOpt, model => model.Frequency)
     .MapFromName("-l", model => model.SuchList)
-);
+    .ToHandler(SuchHandler);
 ```
 
 ### Blended Conventions
@@ -77,11 +76,10 @@ rootCommand.Handler = CommandHandler.FromPropertyMap(SuchHandler,
 The pipeline can handle many approaches binding input. Here's an example of a simple naming convention with an explicit mapping fallback
 
 ```cs
-rootCommand.Handler = CommandHandler.FromPropertyMap(SuchHandler,
-    new BinderPipeline<SuchInput>()
+rootCommand.Handler = new BinderPipeline<SuchInput>()
     .MapFromNameConvention(TextCase.Pascal)
     .MapFromName("-l", model => model.SuchList)
-);
+    .ToHandler(SuchHandler);
 ```
 ### Possible extensions to the pipeline
 Here are some cases I haven't implemented, but would be fairly easy to add
