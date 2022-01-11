@@ -79,9 +79,21 @@ namespace System.CommandLine.PropertyMapBinder
             return pipeline;
         }
 
+
         public static BinderPipeline<InputModel> MapFromReference<InputModel, TProperty>(this BinderPipeline<InputModel> pipeline, Option<TProperty> optionRef, Expression<Func<InputModel, TProperty>> selector)
         {
             pipeline.Add(PropertyMap.FromReference(optionRef, selector));
+            return pipeline;
+        }
+
+        public static BinderPipeline<InputModel> MapFromValue<InputModel, TProperty>(this BinderPipeline<InputModel> pipeline, Expression<Func<InputModel, TProperty>> selector, TProperty value)
+        {
+            var binder = PropertyBinder.FromFunc<InputModel>((model, context) =>{
+                var member = ReflectionHelper.FindProperty(selector);
+                ReflectionHelper.SetMemberValue(member, model, value);
+                return model;
+            });
+            pipeline.Add(binder);
             return pipeline;
         }
 

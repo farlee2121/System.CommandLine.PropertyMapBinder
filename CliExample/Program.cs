@@ -27,6 +27,7 @@ namespace System.CommandLine.PropertyMapBinder.CliExample
                                     // .MapFromName("print-me", contract => contract.PrintMe)
                                     // .MapFromReference(frequencyArg, contract=> contract.Frequency)
                                     .MapFromName("-l", contract => contract.SuchList)
+                                    .MapFromValue(model => model.Frequency, 9000)
                                     .ToHandler(SuchHandler);
                 
             //rootCommand.Handler = CommandHandler.FromPropertyMap(SuchHandler,

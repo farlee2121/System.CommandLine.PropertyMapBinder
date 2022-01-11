@@ -33,7 +33,7 @@ Add alias is part of IdentifierSymbol https://github.com/dotnet/command-line-api
 
 
 Possible next steps
-- [ ] Try improving type inference / signatures of map 
+- [x] Try improving type inference / signatures of map 
   - idea: could use a builder
   - maybe I create an interface instead of the Func. The construction happens internally anyway where I could always construct the type
   - idea: could create an PropertyMapPipeline (interceptor), that has Add() and is itself an instance of `Func<input, content, input>` 
