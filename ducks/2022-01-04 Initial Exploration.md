@@ -19,6 +19,17 @@ Later
 - [ ] Improve naming convention binder
 - [ ] some of the extension cases
 
+## Requirements and Constraints
+The goal is to create an intuitive handler binding experience for [System.CommandLine](https://github.com/dotnet/command-line-api).
+
+- REQ: intuitive binding of complex types
+- CONSTRAINT: The input model has to be some complex type. Else I fall back into arity issues like SetHandler has
+- GOAL: support handler declaraction as a self-contained expression (no reference to symbol instances)
+- GOAL: blending multiple binding rules for a customizable and consistent binding experience
+  - GOAL: support name convention binding
+  - REQ: support explicit member mapping
+- GOAL: easy extension of the binding pipeline
+
 ## Explorations
 
 

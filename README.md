@@ -14,7 +14,7 @@ A few goals
 
 ## Examples
 
-All examples assume this following definitions are available
+All examples assume the following definitions are available
 
 ```cs
 Option<int> frequencyOpt = new Option<int>(new string[] { "--frequency", "-f" }, "such description");
