@@ -162,5 +162,5 @@ TEST: Make sure many arity options map
 TEST: Verify exception when no such input symbol (both name and reference)
 TEST: Verify that later registrations override earlier ones
 TEST: Verify constructor instantiation equals initializer instantiation
- 
+TEST: Verify private members cannot be set
 
