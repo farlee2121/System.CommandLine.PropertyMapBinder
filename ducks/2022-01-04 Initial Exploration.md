@@ -163,6 +163,7 @@ TEST: Verify exception when no such input symbol (both name and reference)
 TEST: Verify that later registrations override earlier ones
 TEST: Verify constructor instantiation equals initializer instantiation
 TEST: Verify private members cannot be set
+- I realized I don't really need to do this because externally defined maps won't be able to specify private members in a path selector. The compiler forbids it
 
 
 Error behavior: Mapped symbol instance that's not registered on the command

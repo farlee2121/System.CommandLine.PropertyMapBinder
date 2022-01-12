@@ -26,6 +26,8 @@ public class CoreMappingTests
         public int IntProperty { get; set; }
         public int IntField { get; set; }
         public IEnumerable<int>? Collection { get; set; }
+
+        private int Private;
     }
 
     static class ExitCodes
@@ -261,7 +263,30 @@ public class CoreMappingTests
         Assert.Equal(expectedModel.Collection, actualModel.Collection);
     }
 
+    [Fact]
+    public void BindToFieldWithSelector()
+    {
+        string symbolName = "-int";
+        var option = new Option<int>(symbolName);
+        var root = new RootCommand()
+        {
+            option
+        };
 
-    // TEST: bind to field
-    // TEST: cannot bind to private members
+        InputModel expectedModel = new InputModel()
+        {
+            IntField = 5
+        };
+        InputModel actualModel = new InputModel();
+        Action<InputModel> boundModelSpy = (model) => { actualModel = model; };
+
+        root.Handler = new BinderPipeline<InputModel>()
+            .MapFromReference(option, m => m.IntField)
+            .ToHandler(boundModelSpy);
+
+        root.Invoke(new string[] { symbolName, expectedModel.IntField.ToString() });
+
+        Assert.Equal(expectedModel.IntField, actualModel.IntField);
+    }
+
 }
