@@ -14,4 +14,15 @@ REQ: Allow mapping to types that have a default constructor without specifying a
 
 ## Exploration
 
-Q: Can constru
+Q: Can constructors impose different generic type constraints?
+- Not finding definitive documentation, but it seems constructors don't accept generic type arguments. They have to be on the class itself.
+  - This would make sense because the constructor should only be initializing, and it can't return anything, so there's not much it could accomplish with it's own generic parameters
+
+What options do I have?
+- OPT: Require a default constructor
+- OPT: Force users to construct from a factory (which could have separate type constraints and handle differences before constructing)
+  - This again pushes me out of idiomatic C#
+  - no less awkward than just providing an instance
+- OPT: Force users to specify a model instance or factory
+  - pro: consistent
+  - con: adds some awkwardness to what seems like the main path 
