@@ -22,12 +22,23 @@ namespace System.CommandLine.PropertyMapBinder.CliExample
                 listOpt
             };
 
+            var subCommand = new Command("sub");
+            subCommand.Handler = new BinderPipeline<SuchInput>()
+                                    .MapFromName("-global", model => model.Global)
+                                    .ToHandler(SuchHandler);
+
+
+
+            var globalOption = new Option<bool>("-global");
+            rootCommand.AddGlobalOption(globalOption);
+
             rootCommand.Handler = new BinderPipeline<SuchInput>()
                                     .MapFromNameConvention(TextCase.Pascal)
                                     // .MapFromName("print-me", contract => contract.PrintMe)
                                     // .MapFromReference(frequencyArg, contract=> contract.Frequency)
                                     .MapFromName("-l", contract => contract.SuchList)
                                     .MapFromValue(model => model.Frequency, 9000)
+                                    .MapFromName("-global", model => model.Global)
                                     .ToHandler(SuchHandler);
                 
             //rootCommand.Handler = CommandHandler.FromPropertyMap(SuchHandler,
@@ -41,13 +52,14 @@ namespace System.CommandLine.PropertyMapBinder.CliExample
 
         public static async Task SuchHandler(SuchInput input)
         {
-            Console.WriteLine($"printme: {input.PrintMe}; \nfrequency: {input.Frequency}; \nlist:{string.Join(",",input.SuchList)}");
+            Console.WriteLine($"printme: {input.PrintMe}; \nfrequency: {input.Frequency}; \nlist:{string.Join(",",input.SuchList)} \nglobal: {input.Global}");
         }
 
         public class SuchInput {
             public int Frequency { get; set; }
             public string? PrintMe { get; set; }
 
+            public bool Global { get; set; }
             public IEnumerable<int> SuchList { get; set; } = Enumerable.Empty<int>();
 
         }

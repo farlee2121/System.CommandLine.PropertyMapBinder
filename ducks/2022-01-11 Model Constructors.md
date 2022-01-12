@@ -26,3 +26,39 @@ What options do I have?
 - OPT: Force users to specify a model instance or factory
   - pro: consistent
   - con: adds some awkwardness to what seems like the main path 
+  - Q: Would overloaded pipeline constructors make it hard to extend the pipeline?
+    - `IPropertyBinder`s would be unaffected
+    - Derivatives of the pipeline don't have to forward every constructor if they don't want to
+    - They do need to forward every constructor if they want to keep the functionality. 
+      - !!! the `IModelFactory` approach doesn't have this problem
+- OPT: have some `IModelFactory` and push construction issues into a different type
+  - makes the construction more flexible and trimmable, but doesn't simplify the API. Something still needs to be passed to either the pipeline constructor
+  or some special extension method
+  - Q: are there other construction strategies than default or from parser values?
+    - maybe from a DI container... but that's a bit sketchy. They could always use the `unit -> model` overload for such a strategy
+  - Q: Do I really need this flexibility and trimability?
+    - it's easy to add now, but hard to add later
+    - I think the reuse of factories by derivatives seals the deal
+  - PRO: derivatives of BinderPipeline can reuse constructor factories defined for BinderPipeline
+
+
+Q: In general, what overloads do I need?
+- a plain instance
+- `context -> model`
+- `unit -> model` is effectively taken care of by `context -> model`
+- `handler -> symbol ref [] -> model`
+- There's a notable divide here, most everything can be built on top of `context -> model`
+
+!!! I think I should force the construction strategy. The pipeline won't work without a defined model initialization strategy (even if that's requiring a default constructor)
+
+## Plan
+
+Create an `IModelFactory` interface that's `context->model`
+
+Have two constructor overloads
+- an instance
+- an `IModelFactory`
+
+TODO: Consider division of factories
+- can't really mix instance reference and name reference strategies nicely. It'd take a union type
+- probably `SymbolInstanceModelFactory` that's `handler, Symbol[] -> model` and `SymbolNameModelFactory` that's `handler, string[] -> model`

@@ -24,6 +24,9 @@ namespace System.CommandLine.PropertyMapBinder
             return matchingSymbolResult;
         }
 
+        private static ArgumentException MappedSymbolDoesntExist(InvocationContext context, string symbolName)
+            => new ArgumentException($"Command {context.ParseResult.CommandResult.Symbol.Name} has no option or argument for alias {symbolName}");
+
         public static IPropertyBinder<InputModel> FromName<InputModel, TProperty>(string name, Func<InputModel, TProperty, InputModel> setter)
         {
             return PropertyBinder.FromFunc((InputModel inputModel, InvocationContext context) =>
@@ -31,7 +34,7 @@ namespace System.CommandLine.PropertyMapBinder
                 
                 IPropertyBinder<InputModel> mapFn;
                 var symbol = GetSymbolForCurrentCommand(context, name);
-                if (symbol == null) throw new ArgumentException($"No input symbol for alias {name}");
+                if (symbol == null) throw MappedSymbolDoesntExist(context, name);
                 else if (symbol is Argument<TProperty> argRef) mapFn = FromReference(argRef, setter);
                 else if (symbol is Option<TProperty> optRef) mapFn = FromReference(optRef, setter);
                 else throw new ArgumentException($"Symbol with {name} is not an Option<{typeof(TProperty)} or Arugument<{typeof(TProperty)}>");
@@ -53,6 +56,7 @@ namespace System.CommandLine.PropertyMapBinder
         {
             return PropertyBinder.FromFunc((InputModel inputModel, InvocationContext context) =>
             {
+                if(!context.ParseResult.CommandResult.Symbol.Children.Contains(optionRef)) throw MappedSymbolDoesntExist(context, string.Join(",", optionRef.Aliases));
                 TProperty propertyValue = context.ParseResult.GetValueForOption(optionRef);
                 return setter(inputModel, propertyValue);
             });
@@ -71,6 +75,8 @@ namespace System.CommandLine.PropertyMapBinder
         {
             return PropertyBinder.FromFunc((InputModel inputModel, InvocationContext context) =>
             {
+                if (!context.ParseResult.CommandResult.Symbol.Children.Contains(argumentRef)) throw MappedSymbolDoesntExist(context, argumentRef.Name);
+
                 TProperty propertyValue = context.ParseResult.GetValueForArgument(argumentRef);
                 return setter(inputModel, propertyValue);
             });

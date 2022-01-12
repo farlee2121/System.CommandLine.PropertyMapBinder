@@ -164,3 +164,15 @@ TEST: Verify that later registrations override earlier ones
 TEST: Verify constructor instantiation equals initializer instantiation
 TEST: Verify private members cannot be set
 
+
+Error behavior: Mapped symbol instance that's not registered on the command
+- Maybe leave it as no error because I don't know the rules around shared and global options
+  - but if they try to map a global option from a name, and that options not on the command, it would be expected to work and fail
+- It does seem like it would be more consistent to throw an error just like we do for name-based
+- Used to have [ValueForArgument](https://github.com/dotnet/command-line-api/blob/ef7f2e808aec0a85d8fe250bd3495c1c19a91a36/src/System.CommandLine/Parsing/ParseResult.cs#L231)
+and [ValueForOption](https://github.com/dotnet/command-line-api/blob/ef7f2e808aec0a85d8fe250bd3495c1c19a91a36/src/System.CommandLine/Parsing/ParseResult.cs#L280) that accepted 
+an alias
+  - This PR shows a time when those methods were implemented. They used GetByAlias and only checked the command result's children
+    - https://github.com/dotnet/command-line-api/pull/1134/files#
+  - GetByAlias still exists, but only as a test helper https://github.com/dotnet/command-line-api/blob/74ae46ea8571269a66945049ce9f134a91d67d1e/src/System.CommandLine.Tests/SymbolSetExtensions.cs. It's basically the same as what I do
+- !!!: testing it showed that the Global option maps correctly to the root and sub-commands

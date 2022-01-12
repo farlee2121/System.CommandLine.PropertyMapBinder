@@ -1,10 +1,10 @@
 
 ## TODO 
 
+- [x] Map from value
 - [ ] Add tests
+- [ ] setup CI build
 - [ ] model initialization (handle constructors at least)
-- [ ] some of the extension cases
-- [ ] Map from value
 - [ ] Prompt user if missing
 - [ ] Improve naming convention binder
   - [ ] make a separate package
