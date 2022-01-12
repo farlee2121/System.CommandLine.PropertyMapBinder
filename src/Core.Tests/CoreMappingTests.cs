@@ -7,6 +7,8 @@ using System.CommandLine.PropertyMapBinder;
 using System;
 using System.CommandLine.Parsing;
 using System.CommandLine.IO;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Core.Tests;
 
@@ -23,6 +25,7 @@ public class CoreMappingTests
     {
         public int IntProperty { get; set; }
         public int IntField { get; set; }
+        public IEnumerable<int>? Collection { get; set; }
     }
 
     static class ExitCodes
@@ -227,7 +230,38 @@ public class CoreMappingTests
         Assert.Equal(expectedModel.IntProperty, actualModel.IntProperty);
     }
 
-    
+    [Fact]
+    public void EnsureCollectionsBindCorrectly()
+    {
+        string symbolName = "-int";
+        var option = new Option<IEnumerable<int>>(symbolName)
+        {
+            Arity = ArgumentArity.ZeroOrMore
+        };
+        var root = new RootCommand()
+        {
+            option
+        };
+
+        InputModel expectedModel = new InputModel()
+        {
+            Collection = new int[] {1,2,4,8}
+        };
+        InputModel actualModel = new InputModel();
+        Action<InputModel> boundModelSpy = (model) => { actualModel = model; };
+
+        root.Handler = new BinderPipeline<InputModel>()
+            .MapFromName(symbolName, m => m.Collection)
+            .ToHandler(boundModelSpy);
+
+        var collectionCliInput = expectedModel.Collection.SelectMany((val) => new string[] { symbolName, val.ToString() });
+        int exitCode = root.Invoke(collectionCliInput.ToArray());
+
+        Assert.Equal(ExitCodes.Normal, exitCode);
+        Assert.Equal(expectedModel.Collection, actualModel.Collection);
+    }
+
+
     // TEST: bind to field
     // TEST: cannot bind to private members
 }
