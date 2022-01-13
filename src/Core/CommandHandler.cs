@@ -53,5 +53,25 @@ namespace System.CommandLine.PropertyMapBinder
             });
         }
 
+        public static ICommandHandler FromPropertyMap<InputModel, T>(Func<InputModel, T> handler, IPropertyBinder<InputModel> propertyBinder, IModelFactory<InputModel> inputFactory)
+        {
+            return new AnonymousCommandHandler(context =>
+            {
+                var inputModel = inputFactory.Create(context);
+                InputModel filledContract = propertyBinder.Bind(inputModel, context);
+                handler(filledContract);
+            });
+        }
+
+        public static ICommandHandler FromPropertyMap<InputModel>(Action<InputModel> handler, IPropertyBinder<InputModel> propertyBinder, IModelFactory<InputModel> inputFactory)
+        {
+            return new AnonymousCommandHandler(context =>
+            {
+                var inputModel = inputFactory.Create(context);
+                InputModel filledContract = propertyBinder.Bind(inputModel, context);
+                handler(filledContract);
+            });
+        }
+
     }
 }

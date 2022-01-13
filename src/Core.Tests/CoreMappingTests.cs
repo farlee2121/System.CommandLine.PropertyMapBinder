@@ -1,8 +1,6 @@
 using Xunit;
 using FsCheck;
-using FsCheck.Xunit;
 using System.CommandLine;
-using System.CommandLine.Builder;
 using System.CommandLine.PropertyMapBinder;
 using System;
 using System.CommandLine.Parsing;
@@ -12,28 +10,14 @@ using System.Linq;
 
 namespace Core.Tests;
 
-//public class CliName{
-//    public static Arbitrary<string> String()
-//    {
-//        Arb.
-//    }
-//}
 
-public class CoreMappingTests
+public partial class CoreMappingTests
 {
     public class InputModel
     {
         public int IntProperty { get; set; }
         public int IntField { get; set; }
         public IEnumerable<int>? Collection { get; set; }
-
-        private int Private;
-    }
-
-    static class ExitCodes
-    {
-        public const int Normal = 0;
-        public const int UnspecifiedError = 1;
     }
 
     [Fact]
@@ -315,5 +299,31 @@ public class CoreMappingTests
         Assert.Equal(expectedModel.IntField, actualModel.IntField);
     }
 
+    [Fact]
+    public void LaterBindersOverrideEarlierValues()
+    {
+        string symbolName = "-int";
+        var option = new Option<int>(symbolName);
+        var root = new RootCommand()
+        {
+            option
+        };
+
+        InputModel expectedModel = new InputModel()
+        {
+            IntField = 5
+        };
+        InputModel actualModel = new InputModel();
+        Action<InputModel> boundModelSpy = (model) => { actualModel = model; };
+
+        root.Handler = new BinderPipeline<InputModel>()
+            .MapFromValue(m => m.IntField, 20)
+            .MapFromValue(m => m.IntField, expectedModel.IntField)
+            .ToHandler(boundModelSpy, actualModel);
+
+        root.Invoke(new string[] { symbolName, expectedModel.IntField.ToString() });
+
+        Assert.Equal(expectedModel.IntField, actualModel.IntField);
+    }
 
 }

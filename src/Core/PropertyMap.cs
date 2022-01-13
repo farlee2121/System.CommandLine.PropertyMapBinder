@@ -7,34 +7,17 @@ namespace System.CommandLine.PropertyMapBinder
 {
     public static partial class PropertyMap
     {
-        private static bool IsAliasMatch(ISymbol symbol, string alias)
-        {
-            //NOTE: Arguments are not an IdentifierSymbol and just Symbol doesn't have aliases
-            if (symbol is Option option) return option.HasAlias(alias);
-            else if (symbol is Argument arg) return arg.Name == alias;
-            else return false;
-
-        }
         private static InputModel NullPropertySetter<InputModel>(InputModel input, InvocationContext invocationContext) => input;
-
-        private static Symbol GetSymbolForCurrentCommand(InvocationContext context, string name)
-        {
-            var executedCommand = context.ParseResult.CommandResult.Symbol;
-            Symbol matchingSymbolResult = executedCommand.Children.FirstOrDefault(symbol => IsAliasMatch(symbol, name));
-            return matchingSymbolResult;
-        }
-
-        private static ArgumentException MappedSymbolDoesntExist(InvocationContext context, string symbolName)
-            => new ArgumentException($"Command {context.ParseResult.CommandResult.Symbol.Name} has no option or argument for alias {symbolName}");
 
         public static IPropertyBinder<InputModel> FromName<InputModel, TProperty>(string name, Func<InputModel, TProperty, InputModel> setter)
         {
             return PropertyBinder.FromFunc((InputModel inputModel, InvocationContext context) =>
             {
-                
+                var command = InvocationContextHelpers.GetCurrentCommand(context);
+
                 IPropertyBinder<InputModel> mapFn;
-                var symbol = GetSymbolForCurrentCommand(context, name);
-                if (symbol == null) throw MappedSymbolDoesntExist(context, name);
+                var symbol = InvocationContextHelpers.GetSymbolForCommand(command, name);
+                if (symbol == null) throw InvocationContextHelpers.MappedSymbolDoesntExist(command, name);
                 else if (symbol is Argument<TProperty> argRef) mapFn = FromReference(argRef, setter);
                 else if (symbol is Option<TProperty> optRef) mapFn = FromReference(optRef, setter);
                 else throw new ArgumentException($"Symbol with {name} is not an Option<{typeof(TProperty)} or Arugument<{typeof(TProperty)}>");
@@ -56,7 +39,8 @@ namespace System.CommandLine.PropertyMapBinder
         {
             return PropertyBinder.FromFunc((InputModel inputModel, InvocationContext context) =>
             {
-                if(!context.ParseResult.CommandResult.Symbol.Children.Contains(optionRef)) throw MappedSymbolDoesntExist(context, string.Join(",", optionRef.Aliases));
+                var command = InvocationContextHelpers.GetCurrentCommand(context);
+                if(!InvocationContextHelpers.IsSymbolRegisteredOnCommand(command, optionRef)) throw InvocationContextHelpers.MappedSymbolDoesntExist(command, string.Join(",", optionRef.Aliases));
                 TProperty propertyValue = context.ParseResult.GetValueForOption(optionRef);
                 return setter(inputModel, propertyValue);
             });
@@ -75,8 +59,9 @@ namespace System.CommandLine.PropertyMapBinder
         {
             return PropertyBinder.FromFunc((InputModel inputModel, InvocationContext context) =>
             {
-                if (!context.ParseResult.CommandResult.Symbol.Children.Contains(argumentRef)) throw MappedSymbolDoesntExist(context, argumentRef.Name);
-
+                var command = InvocationContextHelpers.GetCurrentCommand(context);
+                if (!InvocationContextHelpers.IsSymbolRegisteredOnCommand(command, argumentRef)) throw InvocationContextHelpers.MappedSymbolDoesntExist(command, argumentRef.Name);
+                
                 TProperty propertyValue = context.ParseResult.GetValueForArgument(argumentRef);
                 return setter(inputModel, propertyValue);
             });

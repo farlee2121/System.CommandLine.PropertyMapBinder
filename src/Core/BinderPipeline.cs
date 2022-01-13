@@ -106,7 +106,7 @@ namespace System.CommandLine.PropertyMapBinder
         {
             return CommandHandler.FromPropertyMap(handlerFunc, pipeline);
         }
-        
+
         public static ICommandHandler ToHandler<InputModel, T>(this BinderPipeline<InputModel> pipeline, Func<InputModel, T> handlerFunc, InputModel inputModel)
         {
             return CommandHandler.FromPropertyMap(handlerFunc, pipeline, inputModel);
@@ -115,6 +115,16 @@ namespace System.CommandLine.PropertyMapBinder
         public static ICommandHandler ToHandler<InputModel>(this BinderPipeline<InputModel> pipeline, Action<InputModel> handlerFunc, InputModel inputModel)
         {
             return CommandHandler.FromPropertyMap(handlerFunc, pipeline, inputModel);
+        }
+
+        public static ICommandHandler ToHandler<InputModel, T>(this BinderPipeline<InputModel> pipeline, Func<InputModel, T> handlerFunc, IModelFactory<InputModel> inputFactory)
+        {
+            return CommandHandler.FromPropertyMap(handlerFunc, pipeline, inputFactory);
+        }
+
+        public static ICommandHandler ToHandler<InputModel>(this BinderPipeline<InputModel> pipeline, Action<InputModel> handlerFunc, IModelFactory<InputModel> inputFactory)
+        {
+            return CommandHandler.FromPropertyMap(handlerFunc, pipeline, inputFactory);
         }
 
     }

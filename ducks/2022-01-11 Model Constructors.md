@@ -64,3 +64,7 @@ Have two overloads
 TODO: Consider division of factories
 - can't really mix instance reference and name reference strategies nicely. It'd take a union type
 - probably `SymbolInstanceModelFactory` that's `handler, Symbol[] -> model` and `SymbolNameModelFactory` that's `handler, string[] -> model`
+
+Problem: the model factories won't really work as classes. I run into the constructor overload issue again where I can't have additional generic arguments to the constructor, which I need for arguments to the factory func
+
+TODO: Should probably be consistent about error behavior between modelFactory and property binding. I.e. throw an error if they map a symbol that isn't registered
