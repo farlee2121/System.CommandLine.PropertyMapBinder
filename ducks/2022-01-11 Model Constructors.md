@@ -51,11 +51,13 @@ Q: In general, what overloads do I need?
 
 !!! I think I should force the construction strategy. The pipeline won't work without a defined model initialization strategy (even if that's requiring a default constructor)
 
+Moving to implement, I remembered that BinderPipeline is also an `IPropertyBinder` which expects an instance of the model passed. The place where the model really gets decided is `ToHandler` or `CommandHandler.FromPropertyMap`
+
 ## Plan
 
 Create an `IModelFactory` interface that's `context->model`
 
-Have two constructor overloads
+Have two overloads
 - an instance
 - an `IModelFactory`
 

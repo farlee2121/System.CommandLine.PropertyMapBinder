@@ -289,4 +289,31 @@ public class CoreMappingTests
         Assert.Equal(expectedModel.IntField, actualModel.IntField);
     }
 
+    [Fact]
+    public void ExecutePipelineOnCallerProvidedModelInstance()
+    {
+        string symbolName = "-int";
+        var option = new Option<int>(symbolName);
+        var root = new RootCommand()
+        {
+            option
+        };
+
+        InputModel expectedModel = new InputModel()
+        {
+            IntField = 5
+        };
+        InputModel actualModel = new InputModel();
+        Action<InputModel> boundModelSpy = (model) => { actualModel = model; };
+
+        root.Handler = new BinderPipeline<InputModel>()
+            .MapFromReference(option, m => m.IntField)
+            .ToHandler(boundModelSpy, actualModel);
+
+        root.Invoke(new string[] { symbolName, expectedModel.IntField.ToString() });
+
+        Assert.Equal(expectedModel.IntField, actualModel.IntField);
+    }
+
+
 }
