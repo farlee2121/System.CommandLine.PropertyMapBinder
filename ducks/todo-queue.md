@@ -2,9 +2,9 @@
 ## TODO 
 
 - [x] Map from value
-- [ ] Add tests
-- [ ] setup CI build
-  - [ ] probably also need CD to some private repo for developing child packages
+- [x] Add tests
+- [x] setup CI build
+  - [x] probably also need CD to some private repo for developing child packages
 - [ ] model initialization (handle constructors at least)
 - [ ] Prompt user if missing
 - [ ] Improve naming convention binder
@@ -20,3 +20,6 @@
   - `GetValueForHandlerParameter` considers more cases than me
   - https://github.com/dotnet/command-line-api/blob/446e832ecc07dbd7a7183c55793b27cf81e26f0d/src/System.CommandLine/Handler.cs
 - [ ] See if I can collapse Argument / Option overloads (can still get type information from the property expression)
+
+
+NOTE: I think I can take the core library v1 while leaving extension libraries (name convention, prompt, conventionBuilder) at a preview version
