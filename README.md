@@ -3,13 +3,12 @@
 [![](https://badgen.net/nuget/v/farlee2121.System.CommandLine.PropertyMapBinder)](https://www.nuget.org/packages/farlee2121.System.CommandLine.PropertyMapBinder)
 
 ## Motivation / what is this
-This library is an experiment. The goal is to create an intuitive handler binding experience for [System.CommandLine](https://github.com/dotnet/command-line-api).
+The goal is to create an intuitive handler binding experience for [System.CommandLine](https://github.com/dotnet/command-line-api).
 A few goals
 - intuitive binding of complex types
 - support handler declaraction as a self-contained expression (no reference to symbol instances)
 - blending multiple binding rules for a customizable and consistent binding experience
 - easy extension of the binding pipeline
-
 
 
 ## Examples
@@ -45,30 +44,29 @@ public class SuchInput {
 The backbone construct is `BinderPipeline`. 
 
 ```cs
+rootCommand.Handler = new BinderPipeline<SuchInput>()
+    .MapFromName("print-me", model => model.PrintMe)
+    .MapFromReference(frequencyOpt, model => model.Frequency)
+    .MapFromName("-l", model => model.SuchList)
+    .ToHandler(SuchHandler);
+```
+
+`BinderPipeline` is really a collection of `IPropertyBinder`. Each `IPropertyBinder` defines a strategy for assigning input to the target object.
+The pipeline executes each binder in the order they are given. This means later binders will override earlier ones. This also means we can
+- use multiple rules to bind properties
+- define a priority/fallback chain for any given property
+
+### Alternate Pipeline Approach
+
+The `BinderPipeline` builder extensions offer the best type inference. However, the pipeline is just a list and can be constructed as such.
+
+```cs
 rootCommand.Handler = CommandHandler.FromPropertyMap(SuchHandler,
     new BinderPipeline<SuchInput>{
         PropertyMap.FromName<SuchInput, string>("print-me", model => model.PrintMe ),
         PropertyMap.FromReference<SuchInput, int>(frequencyOpt, model => model.Frequency),
         PropertyMap.FromName<SuchInput, IEnumerable<int>>("-l", model => model.SuchList)
     });
-```
-
-`BinderPipeline` is really a collection of `IPropertyBinder`. Each `IPropertyBinder` defines a strategy for assigning input to the target object.
-The pipeline executes each binder in the order they are given. This means later binders will override earlier ones. This means we can
-- use multiple rules to bind properties
-- define a priority/fallback chain for any given property
-
-### Builder
-
-We can also build the pipeline through a set of extension methods. The primary benefit is improved type inference (thus less explicit typing).
-Binders will still be called in the order registered.
-
-```cs
-rootCommand.Handler = new BinderPipeline<SuchInput>()
-    .MapFromName("print-me", model => model.PrintMe)
-    .MapFromReference(frequencyOpt, model => model.Frequency)
-    .MapFromName("-l", model => model.SuchList)
-    .ToHandler(SuchHandler);
 ```
 
 ### Blended Conventions
@@ -89,6 +87,37 @@ Here are some cases I haven't implemented, but would be fairly easy to add
 - match properties based on type
 - Set a value directly 
   - can be done with the existing setter overload, but could be simpler `.MapFromValue(c => c.Frequency, 5)`
+
+### Binding To Existing Models
+
+Sometimes we might want to initialize our input model separately from the input binding process (e.g. default model from configuration).
+
+That's easy enough
+```cs
+SuchInput existingModelInstance = //...
+rootCommand.Handler = new BinderPipeline<SuchInput>()
+    .ToHandler(SuchHandler, existingModelInstance);
+```
+
+### Initializing a model with required data
+
+Some models may want to enforce guarantees about data through the constructor, or some fields may not allow modification after initialization.
+
+This can be handled similarly to the core library's `SetHandler`.
+
+```cs
+IModelFactory<SuchInput> modelFactory = ModelFactor.FromSymbolMap((int frequency, string printMe) => new InputModel(frequency, printMe), frequencyOpt, printMeArg);
+rootCommand.Handler = new BinderPipeline<SuchInput>()
+    .ToHandler(SuchHandler, modelFactory);
+```
+
+The same can be accomplished with option and argument aliases
+
+```cs
+IModelFactory<SuchInput> modelFactory = ModelFactor.FromNameMap((int frequency, string printMe) => new InputModel(frequency, printMe), "-f", "print-me");
+rootCommand.Handler = new BinderPipeline<SuchInput>()
+    .ToHandler(SuchHandler, modelFactory);
+```
 
 
 ## How to extend
@@ -115,7 +144,8 @@ The other key step is to register extension methods on `BinderPipeline`. The mai
 
 ## Status of project
 
-A successful experiment. Usable, but not production-tested. No guarantees of support
+A successful experiment. The core builder experience is likely stable, but the API could still change given feedback/experience.
 
+The library is usable, has tests, but has no guarantees (including support).
 
 <!-- ## How to Contribute -->
