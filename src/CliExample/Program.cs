@@ -1,6 +1,8 @@
 ﻿using System;
 using System.CommandLine;
 using System.CommandLine.PropertyMapBinder;
+using System.CommandLine.PropertyMapBinder.NameConventionBinder;
+
 namespace System.CommandLine.PropertyMapBinder.CliExample
 {
 

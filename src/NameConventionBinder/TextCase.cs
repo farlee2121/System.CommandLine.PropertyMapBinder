@@ -1,7 +1,10 @@
 ﻿namespace System.CommandLine.PropertyMapBinder.NameConventionBinder
 {
-    public class Class1
+    public enum TextCase
     {
-
+        Camel,
+        Pascal,
+        Snake,
+        Train,
     }
 }

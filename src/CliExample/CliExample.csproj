@@ -10,11 +10,11 @@
 
 	<ItemGroup>
 		<PackageReference Include="System.CommandLine" Version="2.0.0-beta2.21617.1" />
-		<PackageReference Include="CaseExtensions" Version="1.1.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\Core\Core.csproj" />
+		<ProjectReference Include="..\NameConventionBinder\NameConventionBinder.csproj" />
 	</ItemGroup>
 
 </Project>

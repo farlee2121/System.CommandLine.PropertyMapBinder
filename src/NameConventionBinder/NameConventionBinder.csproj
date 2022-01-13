@@ -20,4 +20,9 @@
     <PackageTags>command line;shell;cli;System.CommandLine;System.CommandLine binder</PackageTags>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="CaseExtensions" Version="1.1.0" />
+    <PackageReference Include="farlee2121.System.CommandLine.PropertyMapBinder" Version="0.1.0-beta1" />
+  </ItemGroup>
+
 </Project>
