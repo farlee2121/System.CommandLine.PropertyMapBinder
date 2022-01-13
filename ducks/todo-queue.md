@@ -6,6 +6,7 @@
 - [x] setup CI build
   - [x] probably also need CD to some private repo for developing child packages
 - [ ] model initialization (handle constructors at least)
+  - [ ] documentation update
 - [ ] Prompt user if missing
 - [ ] Improve naming convention binder
   - [ ] make a separate package
