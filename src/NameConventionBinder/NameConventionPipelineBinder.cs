@@ -6,10 +6,10 @@ using CaseExtensions;
 
 namespace System.CommandLine.PropertyMapBinder.NameConventionBinder
 {
-    internal class NamingConventionPipelineBinder<InputModel> : IPropertyBinder<InputModel>
+    internal class NameConventionPipelineBinder<InputModel> : IPropertyBinder<InputModel>
     {
         TextCase _allowedNameCase;
-        public NamingConventionPipelineBinder(TextCase allowedNameCasing)
+        public NameConventionPipelineBinder(TextCase allowedNameCasing)
         {
             _allowedNameCase = allowedNameCasing;
         }
