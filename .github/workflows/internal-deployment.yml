@@ -1,4 +1,4 @@
-name: .NET
+name: Internal Nuget Deployment
 
 on:
   workflow_dispatch: {}
