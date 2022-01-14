@@ -5,12 +5,12 @@
 - [x] Add tests
 - [x] setup CI build
   - [x] probably also need CD to some private repo for developing child packages
-- [ ] model initialization (handle constructors at least)
-  - [ ] documentation update
-- [ ] Prompt user if missing
-- [ ] Improve naming convention binder
-  - [ ] make a separate package
-  - [ ] can generalize to convention (not just name) by taking any function `(symbol, MemberInfo) -> bool`
+- [x] model initialization (handle constructors at least)
+  - [x] documentation update
+- [x] Prompt user if missing 
+- [x] Improve naming convention binder
+  - [x] make a separate package
+  - [x] can generalize to convention (not just name) by taking any function `(symbol, MemberInfo) -> bool`
   - [ ] i'll want combinators for the conventions. At least And/Or. 
     - [ ] hmm, this could be tricky. Consider prefix + pascal. Prefix will pass but pascal will fail because the prefix is still there
 - [ ] Conside Removing static classes (not very idiomatic to C#, maybe use constructors instead)
