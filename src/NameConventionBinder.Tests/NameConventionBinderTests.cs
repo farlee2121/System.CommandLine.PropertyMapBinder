@@ -11,7 +11,7 @@ public class NameConventionBinderTests
 
     public class PascalModel{
         public int ThisIsPascal { get; set; }
-        public string AlsoPascal;
+        public string? AlsoPascal;
     }
 
     [Fact]
@@ -63,6 +63,96 @@ public class NameConventionBinderTests
             .ToHandler(modelSpyHandler);
 
         root.Invoke(new[] { expected.ThisIsPascal.ToString(), "--also-pascal", expected.AlsoPascal });
+
+        DeepAssert.Equal(expected, actualModel);
+    }
+
+    [Fact]
+    public void SilentIfNoMatch()
+    {
+        var expected = new PascalModel();
+
+        var root = new RootCommand()
+        {
+            new Argument<int>("no-match")
+        };
+
+        PascalModel actualModel = new PascalModel();
+        Action<PascalModel> modelSpyHandler = (model) => { actualModel = model; };
+
+        root.Handler = new BinderPipeline<PascalModel>()
+            .MapFromNameConvention(TextCase.Pascal)
+            .MapFromNameConvention(TextCase.Camel)
+            .MapFromNameConvention(TextCase.Snake)
+            .ToHandler(modelSpyHandler);
+
+        root.Invoke(new[] { "5" });
+
+        DeepAssert.Equal(expected, actualModel);
+    }
+
+    class SnakeModel
+    {
+        public int this_is_snake { get; set; }
+        public string? also_snake { get; set; }
+    }
+
+    [Fact]
+    public void SnakeCaseMembers()
+    {
+        var expected = new SnakeModel
+        {
+            this_is_snake = 5,
+            also_snake = Guid.NewGuid().ToString(),
+        };
+
+        var root = new RootCommand()
+        {
+            new Argument<int>("this-is-snake"),
+            new Option<string>("--also-snake"),
+        };
+
+        SnakeModel actualModel = new SnakeModel();
+        Action<SnakeModel> modelSpyHandler = (model) => { actualModel = model; };
+
+        root.Handler = new BinderPipeline<SnakeModel>()
+            .MapFromNameConvention(TextCase.Snake)
+            .ToHandler(modelSpyHandler);
+
+        root.Invoke(new[] { expected.this_is_snake.ToString(), "--also-snake", expected.also_snake });
+
+        DeepAssert.Equal(expected, actualModel);
+    }
+
+    class CamelCaseModel
+    {
+        public int thisIsCamel { get; set; }
+        public string? alsoCamel { get; set; }
+    }
+
+    [Fact]
+    public void CamelCaseMembers()
+    {
+        var expected = new CamelCaseModel
+        {
+            thisIsCamel = 5,
+            alsoCamel = Guid.NewGuid().ToString(),
+        };
+
+        var root = new RootCommand()
+        {
+            new Argument<int>("this-is-camel"),
+            new Option<string>("--also-camel"),
+        };
+
+        CamelCaseModel actualModel = new CamelCaseModel();
+        Action<CamelCaseModel> modelSpyHandler = (model) => { actualModel = model; };
+
+        root.Handler = new BinderPipeline<CamelCaseModel>()
+            .MapFromNameConvention(TextCase.Camel)
+            .ToHandler(modelSpyHandler);
+
+        root.Invoke(new[] { expected.thisIsCamel.ToString(), "--also-camel", expected.alsoCamel });
 
         DeepAssert.Equal(expected, actualModel);
     }

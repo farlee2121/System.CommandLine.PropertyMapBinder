@@ -20,7 +20,6 @@ namespace System.CommandLine.PropertyMapBinder.NameConventionBinder
             if(casing == TextCase.Camel) caseAdjusted = str.ToCamelCase();
             else if(casing == TextCase.Pascal) caseAdjusted = str.ToPascalCase();
             else if(casing == TextCase.Snake) caseAdjusted = str.ToSnakeCase();
-            else if(casing == TextCase.Train) caseAdjusted = str.ToTrainCase();
             else caseAdjusted = str;
 
             return caseAdjusted;

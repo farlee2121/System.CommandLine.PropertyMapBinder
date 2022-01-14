@@ -5,6 +5,5 @@
         Camel,
         Pascal,
         Snake,
-        Train,
     }
 }

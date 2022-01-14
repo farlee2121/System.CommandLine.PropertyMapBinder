@@ -21,7 +21,7 @@ public class DeepAssert
     {
         private readonly string message;
 
-        public ObjectEqualException(object expected, object actual, string message)
+        public ObjectEqualException(object? expected, object? actual, string message)
             : base(expected, actual, "Assert.Equal() Failure")
         {
             this.message = message;
