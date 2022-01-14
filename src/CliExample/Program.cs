@@ -21,7 +21,8 @@ namespace System.CommandLine.PropertyMapBinder.CliExample
             {
                 new Argument<string>("print-me", "gets printed"),
                 frequencyArg, 
-                listOpt
+                listOpt,
+                new Option<string>("-maybe")
             };
 
             var subCommand = new Command("sub");
@@ -39,8 +40,9 @@ namespace System.CommandLine.PropertyMapBinder.CliExample
                                     // .MapFromName("print-me", contract => contract.PrintMe)
                                     // .MapFromReference(frequencyArg, contract=> contract.Frequency)
                                     .MapFromName("-l", contract => contract.SuchList)
-                                    .MapFromValue(model => model.Frequency, 9000)
+                                    //.MapFromValue(model => model.Frequency, 9000)
                                     .MapFromName("-global", model => model.Global)
+                                    .PromptIfMissing("Please provide maybe", model => model.Maybe)
                                     .ToHandler(SuchHandler);
                 
             //rootCommand.Handler = CommandHandler.FromPropertyMap(SuchHandler,
@@ -49,18 +51,22 @@ namespace System.CommandLine.PropertyMapBinder.CliExample
             //         PropertyMap.FromName<SuchInput, int>("-f", contract => contract.Frequency)
             //    });
 
+
             return rootCommand.Invoke(argv);
         }
 
         public static async Task SuchHandler(SuchInput input)
         {
-            Console.WriteLine($"printme: {input.PrintMe}; \nfrequency: {input.Frequency}; \nlist:{string.Join(",",input.SuchList)} \nglobal: {input.Global}");
+            Console.WriteLine($"printme: {input.PrintMe}; \nfrequency: {input.Frequency};" +
+                $" \nlist: {string.Join(",",input.SuchList)} \nglobal: {input.Global}" +
+                $"\nMaybe: {input.Maybe}");
         }
 
         public class SuchInput {
             public int Frequency { get; set; }
-            public string? PrintMe { get; set; }
+            public string PrintMe { get; set; }
 
+            public string Maybe { get; set; }
             public bool Global { get; set; }
             public IEnumerable<int> SuchList { get; set; } = Enumerable.Empty<int>();
 
