@@ -3,7 +3,7 @@
 
 namespace System.CommandLine.PropertyMapBinder
 {
-    public class FuncPropertyBinder<InputModel> : IPropertyBinder<InputModel>
+    internal class FuncPropertyBinder<InputModel> : IPropertyBinder<InputModel>
     {
         private readonly Func<InputModel, InvocationContext, InputModel> setter;
 
@@ -17,7 +17,7 @@ namespace System.CommandLine.PropertyMapBinder
         }
     }
 
-    public static class PropertyBinder
+    internal static class PropertyBinder
     {
         //TODO: Consider how these constructors should be made available. Putting them all in PropertyBinder like it's a module 
         // may not be intuitive for C# users
