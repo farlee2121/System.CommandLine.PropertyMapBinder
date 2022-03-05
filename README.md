@@ -56,19 +56,6 @@ The pipeline executes each binder in the order they are given. This means later 
 - use multiple rules to bind properties
 - define a priority/fallback chain for any given property
 
-### Alternate Pipeline Approach
-
-The `BinderPipeline` builder extensions offer the best type inference. However, the pipeline is just a list and can be constructed as such.
-
-```cs
-rootCommand.Handler = CommandHandler.FromPropertyMap(SuchHandler,
-    new BinderPipeline<SuchInput>{
-        PropertyMap.FromName<SuchInput, string>("print-me", model => model.PrintMe ),
-        PropertyMap.FromReference<SuchInput, int>(frequencyOpt, model => model.Frequency),
-        PropertyMap.FromName<SuchInput, IEnumerable<int>>("-l", model => model.SuchList)
-    });
-```
-
 ### Blended Conventions
 
 The pipeline can handle many approaches binding input. Here's an example of a simple naming convention with an explicit mapping fallback
