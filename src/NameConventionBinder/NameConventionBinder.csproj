@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <PackageReference Include="CaseExtensions" Version="1.1.0" />
-    <PackageReference Include="farlee2121.System.CommandLine.PropertyMapBinder" Version="0.1.0-beta1" />
+    <PackageReference Include="farlee2121.System.CommandLine.PropertyMapBinder" Version="1.0.0-preview1" />
   </ItemGroup>
 
 </Project>
