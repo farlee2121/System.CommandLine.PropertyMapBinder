@@ -51,38 +51,38 @@ namespace System.CommandLine.PropertyMapBinder
     {
         public static BinderPipeline<InputModel> MapFromName<InputModel, TProperty>(this BinderPipeline<InputModel> pipeline, string name, Func<InputModel, TProperty, InputModel> setter)
         {
-            pipeline.Add(PropertyMap.FromName(name, setter));
+            pipeline.Add(new SymbolNamePropertyBinder<InputModel, TProperty>(name, setter));
             return pipeline;
         }
 
         public static BinderPipeline<InputModel> MapFromName<InputModel, TProperty>(this BinderPipeline<InputModel> pipeline, string name, Expression<Func<InputModel, TProperty>> selector)
         {
-            pipeline.Add(PropertyMap.FromName(name, selector));
+            pipeline.Add(new SymbolNamePropertyBinder<InputModel, TProperty>(name, selector));
             return pipeline;
         }
 
         public static BinderPipeline<InputModel> MapFromReference<InputModel, TProperty>(this BinderPipeline<InputModel> pipeline, Argument<TProperty> argRef, Func<InputModel, TProperty, InputModel> setter)
         {
-            pipeline.Add(PropertyMap.FromReference(argRef, setter));
+            pipeline.Add(new SymbolReferencePropertyBinder<InputModel, TProperty>(argRef, setter));
             return pipeline;
         }
 
         public static BinderPipeline<InputModel> MapFromReference<InputModel, TProperty>(this BinderPipeline<InputModel> pipeline, Argument<TProperty> argRef, Expression<Func<InputModel, TProperty>> selector)
         {
-            pipeline.Add(PropertyMap.FromReference(argRef, selector));
+            pipeline.Add(new SymbolReferencePropertyBinder<InputModel, TProperty>(argRef, selector));
             return pipeline;
         }
 
         public static BinderPipeline<InputModel> MapFromReference<InputModel, TProperty>(this BinderPipeline<InputModel> pipeline, Option<TProperty> argRef, Func<InputModel, TProperty, InputModel> setter)
         {
-            pipeline.Add(PropertyMap.FromReference(argRef, setter));
+            pipeline.Add(new SymbolReferencePropertyBinder<InputModel, TProperty>(argRef, setter));
             return pipeline;
         }
 
 
         public static BinderPipeline<InputModel> MapFromReference<InputModel, TProperty>(this BinderPipeline<InputModel> pipeline, Option<TProperty> optionRef, Expression<Func<InputModel, TProperty>> selector)
         {
-            pipeline.Add(PropertyMap.FromReference(optionRef, selector));
+            pipeline.Add(new SymbolReferencePropertyBinder<InputModel, TProperty>(optionRef, selector));
             return pipeline;
         }
 

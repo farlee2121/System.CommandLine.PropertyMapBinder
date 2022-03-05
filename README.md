@@ -85,8 +85,6 @@ Here are some cases I haven't implemented, but would be fairly easy to add
 - Ask a user for any missing inputs 
   - can be done with the existing setter overload, but prompts could be automated with a signature like `.PromptIfMissing(name, selector)`
 - match properties based on type
-- Set a value directly 
-  - can be done with the existing setter overload, but could be simpler `.MapFromValue(c => c.Frequency, 5)`
 
 ### Binding To Existing Models
 
@@ -141,6 +139,29 @@ Examples exist for [symbol name and property path](./Core/PropertyMap.cs) and [s
 The other key step is to register extension methods on `BinderPipeline`. The main behaviors to consider
 - the extension should add it's binder to the end of the pipeline (e.g. `pipeline.Add(yourBinder)`)
 - The extension should return the modified copy of the pipeline (i.e. always has return type `BinderPipeline<T>`)
+
+```cs
+// Example pipeline extension
+public static class BinderPipelineExtensions{
+    public static BinderPipeline<InputModel> MapFromNameConvention<InputModel>(this BinderPipeline<InputModel> pipeline, NameConventionComparer comparer)
+    {
+        pipeline.Add(new NameConventionBinder<InputModel>(comparer)); // this adds an IPropertyBinder<T>
+        return pipeline; // be sure to return the pipeline for further chaining
+    }
+}
+```
+
+## How to handle Dependency Injection?
+
+Short: Invoke the dependency container in the handler function (i.e `ToHandler(handlerFunction)`)
+
+This position of the library is to keep dependency injection separate from model binding. Some reasons include
+- Keeping the two activities separate simplifies error diagnosis and improves code clarity
+- Dependency containers can easily be invoked from within the handlers
+- Input values may need registered with the dependency container, which requires the input model to be complete before the dependency container
+- The input model should *only* model the possible input. It is not responsible for composition or behavior. 
+  - The handler function exists to bridge between the input model and consumers.
+
 
 ## Status of project
 
