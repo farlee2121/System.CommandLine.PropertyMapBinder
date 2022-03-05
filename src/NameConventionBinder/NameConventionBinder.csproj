@@ -10,7 +10,7 @@
   <PropertyGroup>
     <PackageId>farlee2121.System.CommandLine.PropertyMapBinder.NameConventionBinder</PackageId>
     <Title>System.CommandLine.PropertyMapBinder.NameConventionBinder</Title>
-    <VersionPrefix>0.1.0-beta1</VersionPrefix>
+    <VersionPrefix>1.0.0</VersionPrefix>
     <Description>
       A System.CommandLine.PropertyMapBinder extension for mapping console input to properties by simple naming conventions
     </Description>
