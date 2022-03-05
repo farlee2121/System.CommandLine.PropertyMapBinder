@@ -66,12 +66,14 @@ rootCommand.Handler = new BinderPipeline<SuchInput>()
     .MapFromName("-l", model => model.SuchList)
     .ToHandler(SuchHandler);
 ```
-### Possible extensions to the pipeline
-Here are some cases I haven't implemented, but would be fairly easy to add
+
+More conventions can be added to this pipeline. Here are some cases I haven't implemented, but would be fairly easy to add
 - map default values from configuration 
 - Ask a user for any missing inputs 
   - can be done with the existing setter overload, but prompts could be automated with a signature like `.PromptIfMissing(name, selector)`
 - match properties based on type
+
+See [How to Extend](#how-to-extend) for more detail.
 
 ### Binding To Existing Models
 
