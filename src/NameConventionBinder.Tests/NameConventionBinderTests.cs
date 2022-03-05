@@ -32,7 +32,7 @@ public class NameConventionBinderTests
         Action<PascalModel> modelSpyHandler = (model) => { actualModel = model; };
 
         root.Handler = new BinderPipeline<PascalModel>()
-            .MapFromNameConvention(TextCase.Pascal)
+            .MapFromNameConvention(NameConventions.PascalCaseComparer)
             .ToHandler(modelSpyHandler);
 
         root.Invoke(new[] { expected.ThisIsPascal.ToString(), "--also-pascal", expected.AlsoPascal });
@@ -59,7 +59,7 @@ public class NameConventionBinderTests
         Action<PascalModel> modelSpyHandler = (model) => { actualModel = model; };
 
         root.Handler = new BinderPipeline<PascalModel>()
-            .MapFromNameConvention(TextCase.Pascal)
+            .MapFromNameConvention(NameConventions.PascalCaseComparer)
             .ToHandler(modelSpyHandler);
 
         root.Invoke(new[] { expected.ThisIsPascal.ToString(), "--also-pascal", expected.AlsoPascal });
@@ -81,9 +81,9 @@ public class NameConventionBinderTests
         Action<PascalModel> modelSpyHandler = (model) => { actualModel = model; };
 
         root.Handler = new BinderPipeline<PascalModel>()
-            .MapFromNameConvention(TextCase.Pascal)
-            .MapFromNameConvention(TextCase.Camel)
-            .MapFromNameConvention(TextCase.Snake)
+            .MapFromNameConvention(NameConventions.PascalCaseComparer)
+            .MapFromNameConvention(NameConventions.CamelCaseComparer)
+            .MapFromNameConvention(NameConventions.SnakeCaseComparer)
             .ToHandler(modelSpyHandler);
 
         root.Invoke(new[] { "5" });
@@ -116,7 +116,7 @@ public class NameConventionBinderTests
         Action<SnakeModel> modelSpyHandler = (model) => { actualModel = model; };
 
         root.Handler = new BinderPipeline<SnakeModel>()
-            .MapFromNameConvention(TextCase.Snake)
+            .MapFromNameConvention(NameConventions.SnakeCaseComparer)
             .ToHandler(modelSpyHandler);
 
         root.Invoke(new[] { expected.this_is_snake.ToString(), "--also-snake", expected.also_snake });
@@ -149,7 +149,7 @@ public class NameConventionBinderTests
         Action<CamelCaseModel> modelSpyHandler = (model) => { actualModel = model; };
 
         root.Handler = new BinderPipeline<CamelCaseModel>()
-            .MapFromNameConvention(TextCase.Camel)
+            .MapFromNameConvention(NameConventions.CamelCaseComparer)
             .ToHandler(modelSpyHandler);
 
         root.Invoke(new[] { expected.thisIsCamel.ToString(), "--also-camel", expected.alsoCamel });

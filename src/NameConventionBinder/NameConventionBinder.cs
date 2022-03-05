@@ -8,10 +8,7 @@ namespace System.CommandLine.PropertyMapBinder.NameConventionBinder
 {
     public delegate bool NameConventionComparer(IReadOnlyCollection<string> cliAliases, string memberName);
 
-    public class NameConventionBinder<InputModel> : IPropertyBinder<InputModel>
-    {
-
-        private NameConventionComparer NullComparer = (aliases, memberName) => false;
+    public static class NameConventions {
         public static NameConventionComparer PascalCaseComparer = (aliases, memberName) =>
         {
             return aliases.Any(a => a.ToPascalCase() == memberName);
@@ -26,28 +23,18 @@ namespace System.CommandLine.PropertyMapBinder.NameConventionBinder
         {
             return aliases.Any(a => a.ToSnakeCase() == memberName);
         };
+    }
 
+    public class NameConventionBinder<InputModel> : IPropertyBinder<InputModel>
+    {
+
+        private NameConventionComparer NullComparer = (aliases, memberName) => false;
 
         NameConventionComparer _conventionComparer;
-        public NameConventionBinder(TextCase allowedNameCasing)
-        {
-            _conventionComparer = CaseToComparer(allowedNameCasing);
-        }
 
         public NameConventionBinder(NameConventionComparer nameComparer)
         {
             _conventionComparer = nameComparer;
-        }
-
-        private NameConventionComparer CaseToComparer(TextCase casing)
-        {
-            NameConventionComparer conventionComparer;
-            if(casing == TextCase.Camel) conventionComparer = CamelCaseComparer;
-            else if(casing == TextCase.Pascal) conventionComparer = PascalCaseComparer;
-            else if(casing == TextCase.Snake) conventionComparer = SnakeCaseComparer;
-            else conventionComparer = NullComparer;
-
-            return conventionComparer;
         }
 
         private object GetSymbolValue(InvocationContext context, Symbol symbol)

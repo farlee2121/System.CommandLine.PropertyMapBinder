@@ -75,7 +75,7 @@ The pipeline can handle many approaches binding input. Here's an example of a si
 
 ```cs
 rootCommand.Handler = new BinderPipeline<SuchInput>()
-    .MapFromNameConvention(TextCase.Pascal)
+    .MapFromNameConvention(NameConvention.PascalCaseComparer)
     .MapFromName("-l", model => model.SuchList)
     .ToHandler(SuchHandler);
 ```

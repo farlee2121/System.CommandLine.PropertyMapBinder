@@ -36,7 +36,7 @@ namespace System.CommandLine.PropertyMapBinder.CliExample
             rootCommand.AddGlobalOption(globalOption);
 
             rootCommand.Handler = new BinderPipeline<SuchInput>()
-                                    .MapFromNameConvention(TextCase.Pascal)
+                                    .MapFromNameConvention(NameConventions.PascalCaseComparer)
                                     // .MapFromName("print-me", contract => contract.PrintMe)
                                     // .MapFromReference(frequencyArg, contract=> contract.Frequency)
                                     .MapFromName("-l", contract => contract.SuchList)
