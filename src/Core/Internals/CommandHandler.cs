@@ -1,7 +1,7 @@
 ﻿using System.CommandLine.Invocation;
 
 
-namespace System.CommandLine.PropertyMapBinder
+namespace System.CommandLine.PropertyMapBinder.Internals
 {
 
     internal class CommandHandler

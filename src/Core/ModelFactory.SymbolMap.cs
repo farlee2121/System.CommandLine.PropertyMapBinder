@@ -1,4 +1,5 @@
 using System.CommandLine.Invocation;
+using System.CommandLine.PropertyMapBinder.Internals;
 using System.CommandLine.PropertyMapBinder.ModelFactories;
 
 namespace System.CommandLine.PropertyMapBinder

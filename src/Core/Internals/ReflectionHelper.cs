@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-namespace System.CommandLine.PropertyMapBinder
+namespace System.CommandLine.PropertyMapBinder.Internals
 {
     /// <summary>
     /// Cherry-picked from AutoMapper: https://github.com/AutoMapper/AutoMapper/blob/v10.0.0/src/AutoMapper/Internal/ReflectionHelper.cs

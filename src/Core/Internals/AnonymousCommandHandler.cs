@@ -1,7 +1,7 @@
 ﻿using System.CommandLine.Invocation;
 using System.Threading.Tasks;
 
-namespace System.CommandLine.PropertyMapBinder
+namespace System.CommandLine.PropertyMapBinder.Internals
 {
     internal class AnonymousCommandHandler : ICommandHandler
     {

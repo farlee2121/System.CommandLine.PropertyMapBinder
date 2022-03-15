@@ -1,4 +1,5 @@
 using System.CommandLine.Invocation;
+using System.CommandLine.PropertyMapBinder.Internals;
 using System.Linq.Expressions;
 using System.Reflection;
 

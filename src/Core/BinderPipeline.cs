@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.CommandLine.Invocation;
+using System.CommandLine.PropertyMapBinder.Internals;
 using System.CommandLine.PropertyMapBinder.PropertyBinders;
 using System.Linq;
 using System.Linq.Expressions;
