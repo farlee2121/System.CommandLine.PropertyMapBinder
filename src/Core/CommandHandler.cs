@@ -6,61 +6,61 @@ namespace System.CommandLine.PropertyMapBinder
 
     internal class CommandHandler
     {
-        public static ICommandHandler FromPropertyMap<InputModel>(Action<InputModel> handler, IPropertyBinder<InputModel> propertyBinder) where InputModel : new()
+        public static ICommandHandler FromPropertyMap<TInputModel>(Action<TInputModel> handler, IPropertyBinder<TInputModel> propertyBinder) where TInputModel : new()
         {
             
             return new AnonymousCommandHandler(context =>
             {
-                InputModel inputModel = new InputModel();
-                InputModel filledContract = propertyBinder.Bind(inputModel, context);
+                TInputModel inputModel = new TInputModel();
+                TInputModel filledContract = propertyBinder.Bind(inputModel, context);
                 handler(filledContract);
             });
         }
 
-        public static ICommandHandler FromPropertyMap<InputModel, T>(Func<InputModel, T> handler, IPropertyBinder<InputModel> propertyBinder) where InputModel : new()
+        public static ICommandHandler FromPropertyMap<TInputModel, T>(Func<TInputModel, T> handler, IPropertyBinder<TInputModel> propertyBinder) where TInputModel : new()
         {
             return new AnonymousCommandHandler(context =>
             {
-                InputModel inputModel = new InputModel();
-                InputModel filledContract = propertyBinder.Bind(inputModel, context);
+                TInputModel inputModel = new TInputModel();
+                TInputModel filledContract = propertyBinder.Bind(inputModel, context);
                 handler(filledContract);
             });
         }
 
-        public static ICommandHandler FromPropertyMap<InputModel, T>(Func<InputModel, T> handler, IPropertyBinder<InputModel> propertyBinder, InputModel inputModel)
+        public static ICommandHandler FromPropertyMap<TInputModel, T>(Func<TInputModel, T> handler, IPropertyBinder<TInputModel> propertyBinder, TInputModel inputModel)
         {
             return new AnonymousCommandHandler(context =>
             {
-                InputModel filledContract = propertyBinder.Bind(inputModel, context);
+                TInputModel filledContract = propertyBinder.Bind(inputModel, context);
                 handler(filledContract);
             });
         }
 
-        public static ICommandHandler FromPropertyMap<InputModel>(Action<InputModel> handler, IPropertyBinder<InputModel> propertyBinder, InputModel inputModel)
+        public static ICommandHandler FromPropertyMap<TInputModel>(Action<TInputModel> handler, IPropertyBinder<TInputModel> propertyBinder, TInputModel inputModel)
         {
             return new AnonymousCommandHandler(context =>
             {
-                InputModel filledContract = propertyBinder.Bind(inputModel, context);
+                TInputModel filledContract = propertyBinder.Bind(inputModel, context);
                 handler(filledContract);
             });
         }
 
-        public static ICommandHandler FromPropertyMap<InputModel, T>(Func<InputModel, T> handler, IPropertyBinder<InputModel> propertyBinder, IModelFactory<InputModel> inputFactory)
-        {
-            return new AnonymousCommandHandler(context =>
-            {
-                var inputModel = inputFactory.Create(context);
-                InputModel filledContract = propertyBinder.Bind(inputModel, context);
-                handler(filledContract);
-            });
-        }
-
-        public static ICommandHandler FromPropertyMap<InputModel>(Action<InputModel> handler, IPropertyBinder<InputModel> propertyBinder, IModelFactory<InputModel> inputFactory)
+        public static ICommandHandler FromPropertyMap<TInputModel, T>(Func<TInputModel, T> handler, IPropertyBinder<TInputModel> propertyBinder, IModelFactory<TInputModel> inputFactory)
         {
             return new AnonymousCommandHandler(context =>
             {
                 var inputModel = inputFactory.Create(context);
-                InputModel filledContract = propertyBinder.Bind(inputModel, context);
+                TInputModel filledContract = propertyBinder.Bind(inputModel, context);
+                handler(filledContract);
+            });
+        }
+
+        public static ICommandHandler FromPropertyMap<TInputModel>(Action<TInputModel> handler, IPropertyBinder<TInputModel> propertyBinder, IModelFactory<TInputModel> inputFactory)
+        {
+            return new AnonymousCommandHandler(context =>
+            {
+                var inputModel = inputFactory.Create(context);
+                TInputModel filledContract = propertyBinder.Bind(inputModel, context);
                 handler(filledContract);
             });
         }

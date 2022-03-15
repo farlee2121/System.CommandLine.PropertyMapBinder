@@ -3,8 +3,8 @@
 
 namespace System.CommandLine.PropertyMapBinder
 {
-    public interface IPropertyBinder<InputModel>
+    public interface IPropertyBinder<TInputModel>
     {
-        InputModel Bind(InputModel inputModel, InvocationContext context);
+        TInputModel Bind(TInputModel inputModel, InvocationContext context);
     }
 }

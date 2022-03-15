@@ -16,7 +16,7 @@ namespace System.CommandLine.PropertyMapBinder.CliExample
 
     public static class UserPropmptBinderPipelineExtensions
     {
-        public static BinderPipeline<InputModel> PromptUser<InputModel, T>(this BinderPipeline<InputModel> pipeline, string prompt, Expression<Func<InputModel, T>> selectorLambda)
+        public static BinderPipeline<TInputModel> PromptUser<TInputModel, T>(this BinderPipeline<TInputModel> pipeline, string prompt, Expression<Func<TInputModel, T>> selectorLambda)
         {
             Console.WriteLine(prompt);
             string input = Console.ReadLine();
@@ -32,9 +32,9 @@ namespace System.CommandLine.PropertyMapBinder.CliExample
             return pipeline.MapFromValue(selectorLambda, parsed);
         }
 
-        public static BinderPipeline<InputModel> PromptIfMissing<InputModel, T>(this BinderPipeline<InputModel> pipeline, string prompt, Expression<Func<InputModel, T>> selectorLambda)
+        public static BinderPipeline<TInputModel> PromptIfMissing<TInputModel, T>(this BinderPipeline<TInputModel> pipeline, string prompt, Expression<Func<TInputModel, T>> selectorLambda)
         {
-            var binder = FuncPropertyBinder.FromFunc((InputModel model, InvocationContext context) =>
+            var binder = FuncPropertyBinder.FromFunc((TInputModel model, InvocationContext context) =>
             {
                 var modelValue = selectorLambda.Compile().Invoke(model);
                 if (modelValue == null)
@@ -61,7 +61,7 @@ namespace System.CommandLine.PropertyMapBinder.CliExample
             return pipeline;
         }
 
-        public static BinderPipeline<InputModel> PromptIfMissing<InputModel, T>(this BinderPipeline<InputModel> pipeline, Option<T> symbol, Expression<Func<InputModel, T>> selectorLambda)
+        public static BinderPipeline<TInputModel> PromptIfMissing<TInputModel, T>(this BinderPipeline<TInputModel> pipeline, Option<T> symbol, Expression<Func<TInputModel, T>> selectorLambda)
         {
             //Q: do I really need this scenario. Prompt if missing should really be operating off of the input model because values can come from many sources
 
@@ -89,17 +89,17 @@ namespace System.CommandLine.PropertyMapBinder.CliExample
 
     }
 
-    internal class FuncPropertyBinder<InputModel> : IPropertyBinder<InputModel>
+    internal class FuncPropertyBinder<TInputModel> : IPropertyBinder<TInputModel>
     {
-        private readonly Func<InputModel, InvocationContext, InputModel> setter;
+        private readonly Func<TInputModel, InvocationContext, TInputModel> setter;
 
-        public FuncPropertyBinder(Func<InputModel, InvocationContext, InputModel> setter)
+        public FuncPropertyBinder(Func<TInputModel, InvocationContext, TInputModel> setter)
         {
             this.setter = setter;
         }
-        public InputModel Bind(InputModel InputModel, InvocationContext context)
+        public TInputModel Bind(TInputModel TInputModel, InvocationContext context)
         {
-            return setter(InputModel, context);
+            return setter(TInputModel, context);
         }
     }
 
@@ -107,9 +107,9 @@ namespace System.CommandLine.PropertyMapBinder.CliExample
     {
         //TODO: Consider how these constructors should be made available. Putting them all in PropertyBinder like it's a module 
         // may not be intuitive for C# users
-        public static FuncPropertyBinder<InputModel> FromFunc<InputModel>(Func<InputModel, InvocationContext, InputModel> setter)
+        public static FuncPropertyBinder<TInputModel> FromFunc<TInputModel>(Func<TInputModel, InvocationContext, TInputModel> setter)
         {
-            return new FuncPropertyBinder<InputModel>(setter);
+            return new FuncPropertyBinder<TInputModel>(setter);
         }
     }
 

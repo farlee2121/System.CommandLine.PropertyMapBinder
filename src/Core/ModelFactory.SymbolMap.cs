@@ -3,9 +3,9 @@ namespace System.CommandLine.PropertyMapBinder
 {
     public static partial class ModelFactory
     {
-        public static IModelFactory<InputModel> FromContext<InputModel>(Func<InvocationContext, InputModel> factory)
+        public static IModelFactory<TInputModel> FromContext<TInputModel>(Func<InvocationContext, TInputModel> factory)
         {
-            return new FuncModelFactory<InputModel>(factory);
+            return new FuncModelFactory<TInputModel>(factory);
         }
 
         private static void EnsureAllSymbolMapsAreValid(InvocationContext context, Symbol[] symbols)
@@ -18,7 +18,7 @@ namespace System.CommandLine.PropertyMapBinder
             }
         }
 
-        public static IModelFactory<InputModel> FromSymbolMap<T1,InputModel>(Func<T1,InputModel> factory, params Symbol[] symbols)
+        public static IModelFactory<TInputModel> FromSymbolMap<T1,TInputModel>(Func<T1,TInputModel> factory, params Symbol[] symbols)
         {
             return FromContext(context =>{
                 EnsureAllSymbolMapsAreValid(context, symbols);
@@ -28,7 +28,7 @@ namespace System.CommandLine.PropertyMapBinder
             });
         }
 
-        public static IModelFactory<InputModel> FromSymbolMap<T1,T2,InputModel>(Func<T1,T2,InputModel> factory, params Symbol[] symbols)
+        public static IModelFactory<TInputModel> FromSymbolMap<T1,T2,TInputModel>(Func<T1,T2,TInputModel> factory, params Symbol[] symbols)
         {
             return FromContext(context =>{
                 EnsureAllSymbolMapsAreValid(context, symbols);
@@ -39,7 +39,7 @@ namespace System.CommandLine.PropertyMapBinder
             });
         }
 
-        public static IModelFactory<InputModel> FromSymbolMap<T1,T2,T3,InputModel>(Func<T1,T2,T3,InputModel> factory, params Symbol[] symbols)
+        public static IModelFactory<TInputModel> FromSymbolMap<T1,T2,T3,TInputModel>(Func<T1,T2,T3,TInputModel> factory, params Symbol[] symbols)
         {
             return FromContext(context =>{
                 EnsureAllSymbolMapsAreValid(context, symbols);
@@ -51,7 +51,7 @@ namespace System.CommandLine.PropertyMapBinder
             });
         }
 
-        public static IModelFactory<InputModel> FromSymbolMap<T1, T2, T3, T4, InputModel>(Func<T1, T2, T3, T4, InputModel> factory, params Symbol[] symbols)
+        public static IModelFactory<TInputModel> FromSymbolMap<T1, T2, T3, T4, TInputModel>(Func<T1, T2, T3, T4, TInputModel> factory, params Symbol[] symbols)
         {
             return FromContext(context => {
                 EnsureAllSymbolMapsAreValid(context, symbols);
@@ -64,7 +64,7 @@ namespace System.CommandLine.PropertyMapBinder
             });
         }
 
-        public static IModelFactory<InputModel> FromSymbolMap<T1, T2, T3, T4, T5, InputModel>(Func<T1, T2, T3, T4, T5, InputModel> factory, params Symbol[] symbols)
+        public static IModelFactory<TInputModel> FromSymbolMap<T1, T2, T3, T4, T5, TInputModel>(Func<T1, T2, T3, T4, T5, TInputModel> factory, params Symbol[] symbols)
         {
             return FromContext(context => {
                 EnsureAllSymbolMapsAreValid(context, symbols);
@@ -78,7 +78,7 @@ namespace System.CommandLine.PropertyMapBinder
             });
         }
 
-        public static IModelFactory<InputModel> FromSymbolMap<T1, T2, T3, T4, T5, T6, InputModel>(Func<T1, T2, T3, T4, T5, T6, InputModel> factory, params Symbol[] symbols)
+        public static IModelFactory<TInputModel> FromSymbolMap<T1, T2, T3, T4, T5, T6, TInputModel>(Func<T1, T2, T3, T4, T5, T6, TInputModel> factory, params Symbol[] symbols)
         {
             return FromContext(context => {
                 EnsureAllSymbolMapsAreValid(context, symbols);
@@ -93,7 +93,7 @@ namespace System.CommandLine.PropertyMapBinder
             });
         }
 
-        public static IModelFactory<InputModel> FromSymbolMap<T1, T2, T3, T4, T5, T6, T7, InputModel>(Func<T1, T2, T3, T4, T5, T6, T7, InputModel> factory, params Symbol[] symbols)
+        public static IModelFactory<TInputModel> FromSymbolMap<T1, T2, T3, T4, T5, T6, T7, TInputModel>(Func<T1, T2, T3, T4, T5, T6, T7, TInputModel> factory, params Symbol[] symbols)
         {
             return FromContext(context => {
                 EnsureAllSymbolMapsAreValid(context, symbols);

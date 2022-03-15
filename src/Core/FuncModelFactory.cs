@@ -1,16 +1,16 @@
 using System.CommandLine.Invocation;
 namespace System.CommandLine.PropertyMapBinder
 {
-    public class FuncModelFactory<InputModel> : IModelFactory<InputModel>
+    public class FuncModelFactory<TInputModel> : IModelFactory<TInputModel>
     {
-        private readonly Func<InvocationContext, InputModel> factory;
+        private readonly Func<InvocationContext, TInputModel> factory;
 
-        public FuncModelFactory(Func<InvocationContext, InputModel> factory)
+        public FuncModelFactory(Func<InvocationContext, TInputModel> factory)
         {
             this.factory = factory;
         }
 
-        public InputModel Create(InvocationContext context)
+        public TInputModel Create(InvocationContext context)
         {
             return factory(context);
         }

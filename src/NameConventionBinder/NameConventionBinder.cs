@@ -25,7 +25,7 @@ namespace System.CommandLine.PropertyMapBinder.NameConventionBinder
         };
     }
 
-    public class NameConventionBinder<InputModel> : IPropertyBinder<InputModel>
+    public class NameConventionBinder<TInputModel> : IPropertyBinder<TInputModel>
     {
 
         private NameConventionComparer NullComparer = (aliases, memberName) => false;
@@ -54,12 +54,12 @@ namespace System.CommandLine.PropertyMapBinder.NameConventionBinder
             else return new string[0].ToReadOnlyCollection();
         }
 
-        public InputModel Bind(InputModel inputModel, InvocationContext context)
+        public TInputModel Bind(TInputModel inputModel, InvocationContext context)
         {
             var currentCommand = context.ParseResult.CommandResult.Symbol;
             var symbols = currentCommand.Children;
 
-            Type inputModelType = typeof(InputModel);
+            Type inputModelType = typeof(TInputModel);
             var inputModelMembers = new List<MemberInfo>()
                 //TODO: probably want to limit to public if this goes beyond proof of concept
                 .Concat(inputModelType.GetProperties() ?? Enumerable.Empty<MemberInfo>())

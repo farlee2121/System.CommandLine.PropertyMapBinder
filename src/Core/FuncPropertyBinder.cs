@@ -3,15 +3,15 @@
 
 namespace System.CommandLine.PropertyMapBinder
 {
-    internal class FuncPropertyBinder<InputModel> : IPropertyBinder<InputModel>
+    internal class FuncPropertyBinder<TInputModel> : IPropertyBinder<TInputModel>
     {
-        private readonly Func<InputModel, InvocationContext, InputModel> setter;
+        private readonly Func<TInputModel, InvocationContext, TInputModel> setter;
 
-        public FuncPropertyBinder(Func<InputModel, InvocationContext, InputModel> setter)
+        public FuncPropertyBinder(Func<TInputModel, InvocationContext, TInputModel> setter)
         {
             this.setter = setter;
         }
-        public InputModel Bind(InputModel InputModel, InvocationContext context)
+        public TInputModel Bind(TInputModel InputModel, InvocationContext context)
         {
             return setter(InputModel, context);
         }
@@ -21,9 +21,9 @@ namespace System.CommandLine.PropertyMapBinder
     {
         //TODO: Consider how these constructors should be made available. Putting them all in PropertyBinder like it's a module 
         // may not be intuitive for C# users
-        public static FuncPropertyBinder<InputModel> FromFunc<InputModel>(Func<InputModel, InvocationContext, InputModel> setter)
+        public static FuncPropertyBinder<TInputModel> FromFunc<TInputModel>(Func<TInputModel, InvocationContext, TInputModel> setter)
         {
-            return new FuncPropertyBinder<InputModel>(setter);
+            return new FuncPropertyBinder<TInputModel>(setter);
         }
     }
 }

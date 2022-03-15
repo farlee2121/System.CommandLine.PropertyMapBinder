@@ -3,9 +3,9 @@ namespace System.CommandLine.PropertyMapBinder.NameConventionBinder
     public static class PipelineBinderExtensions
     {
 
-        public static BinderPipeline<InputModel> MapFromNameConvention<InputModel>(this BinderPipeline<InputModel> pipeline, NameConventionComparer comparer)
+        public static BinderPipeline<TInputModel> MapFromNameConvention<TInputModel>(this BinderPipeline<TInputModel> pipeline, NameConventionComparer comparer)
         {
-            pipeline.Add(new NameConventionBinder<InputModel>(comparer));
+            pipeline.Add(new NameConventionBinder<TInputModel>(comparer));
             return pipeline;
         }
     }

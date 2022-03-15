@@ -12,7 +12,7 @@ namespace System.CommandLine.PropertyMapBinder
             T value = InvocationContextHelpers.GetValueForSymbol<T>(context, symbol);
             return value;
         }
-        public static IModelFactory<InputModel> FromNameMap<T1,InputModel>(Func<T1,InputModel> factory, params string[] aliases)
+        public static IModelFactory<TInputModel> FromNameMap<T1,TInputModel>(Func<T1,TInputModel> factory, params string[] aliases)
         {
             return FromContext(context =>{
                 var command = InvocationContextHelpers.GetCurrentCommand(context);
@@ -22,7 +22,7 @@ namespace System.CommandLine.PropertyMapBinder
             });
         }
 
-        public static IModelFactory<InputModel> FromNameMap<T1,T2,InputModel>(Func<T1,T2,InputModel> factory, params string[] aliases)
+        public static IModelFactory<TInputModel> FromNameMap<T1,T2,TInputModel>(Func<T1,T2,TInputModel> factory, params string[] aliases)
         {
             return FromContext(context =>{
                 var command = InvocationContextHelpers.GetCurrentCommand(context);
@@ -33,7 +33,7 @@ namespace System.CommandLine.PropertyMapBinder
             });
         }
 
-        public static IModelFactory<InputModel> FromNameMap<T1,T2,T3,InputModel>(Func<T1,T2,T3,InputModel> factory, params string[] aliases)
+        public static IModelFactory<TInputModel> FromNameMap<T1,T2,T3,TInputModel>(Func<T1,T2,T3,TInputModel> factory, params string[] aliases)
         {
             return FromContext(context =>{
                 var command = InvocationContextHelpers.GetCurrentCommand(context);
@@ -45,7 +45,7 @@ namespace System.CommandLine.PropertyMapBinder
             });
         }
 
-        public static IModelFactory<InputModel> FromNameMap<T1, T2, T3, T4, InputModel>(Func<T1, T2, T3, T4, InputModel> factory, params string[] aliases)
+        public static IModelFactory<TInputModel> FromNameMap<T1, T2, T3, T4, TInputModel>(Func<T1, T2, T3, T4, TInputModel> factory, params string[] aliases)
         {
             return FromContext(context => {
                 var command = InvocationContextHelpers.GetCurrentCommand(context);
@@ -58,7 +58,7 @@ namespace System.CommandLine.PropertyMapBinder
             });
         }
 
-        public static IModelFactory<InputModel> FromNameMap<T1, T2, T3, T4, T5, InputModel>(Func<T1, T2, T3, T4, T5, InputModel> factory, params string[] aliases)
+        public static IModelFactory<TInputModel> FromNameMap<T1, T2, T3, T4, T5, TInputModel>(Func<T1, T2, T3, T4, T5, TInputModel> factory, params string[] aliases)
         {
             return FromContext(context => {
                 var command = InvocationContextHelpers.GetCurrentCommand(context);
@@ -72,7 +72,7 @@ namespace System.CommandLine.PropertyMapBinder
             });
         }
 
-        public static IModelFactory<InputModel> FromNameMap<T1, T2, T3, T4, T5, T6, InputModel>(Func<T1, T2, T3, T4, T5, T6, InputModel> factory, params string[] aliases)
+        public static IModelFactory<TInputModel> FromNameMap<T1, T2, T3, T4, T5, T6, TInputModel>(Func<T1, T2, T3, T4, T5, T6, TInputModel> factory, params string[] aliases)
         {
             return FromContext(context => {
                 var command = InvocationContextHelpers.GetCurrentCommand(context);
@@ -87,7 +87,7 @@ namespace System.CommandLine.PropertyMapBinder
             });
         }
 
-        public static IModelFactory<InputModel> FromNameMap<T1, T2, T3, T4, T5, T6, T7, InputModel>(Func<T1, T2, T3, T4, T5, T6, T7, InputModel> factory, params string[] aliases)
+        public static IModelFactory<TInputModel> FromNameMap<T1, T2, T3, T4, T5, T6, T7, TInputModel>(Func<T1, T2, T3, T4, T5, T6, T7, TInputModel> factory, params string[] aliases)
         {
             return FromContext(context => {
                 var command = InvocationContextHelpers.GetCurrentCommand(context);
