@@ -88,11 +88,7 @@ namespace System.CommandLine.PropertyMapBinder
 
         public static BinderPipeline<InputModel> MapFromValue<InputModel, TProperty>(this BinderPipeline<InputModel> pipeline, Expression<Func<InputModel, TProperty>> selector, TProperty value)
         {
-            var binder = new ConstantPropertyBinder<InputModel, TProperty>(value, (model, _value) =>{
-                var member = ReflectionHelper.FindProperty(selector);
-                ReflectionHelper.SetMemberValue(member, model, _value);
-                return model;
-            });
+            var binder = new ConstantPropertyBinder<InputModel, TProperty>(value, ReflectionHelper.SelectorToSetter(selector));
             pipeline.Add(binder);
             return pipeline;
         }

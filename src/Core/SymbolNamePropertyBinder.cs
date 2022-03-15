@@ -18,17 +18,10 @@ namespace System.CommandLine.PropertyMapBinder
         public SymbolNamePropertyBinder(string symbolName, Expression<Func<TInputModel, TProperty>> selectorLambda)
         {
             this.symbolName = symbolName;
-            _propertySetter = SelectorToSetter(selectorLambda);
+            _propertySetter = ReflectionHelper.SelectorToSetter(selectorLambda);
         }
 
-        private Func<TInputModel, TProperty, TInputModel> SelectorToSetter(Expression<Func<TInputModel, TProperty>> selectorLambda){
-            return (contract, propertyValue) =>
-            {
-                MemberInfo member = ReflectionHelper.FindProperty(selectorLambda);
-                ReflectionHelper.SetMemberValue(member, contract, propertyValue);
-                return contract;
-            };
-        }
+        
 
         public TInputModel Bind(TInputModel inputModel, InvocationContext context)
         {

@@ -65,5 +65,15 @@ namespace System.CommandLine.PropertyMapBinder
 
             throw new InvalidOperationException("Couldn't resolve a member from given selector.");
         }
+
+        internal static Func<TInputModel, TProperty, TInputModel> SelectorToSetter<TInputModel, TProperty>(Expression<Func<TInputModel, TProperty>> selectorLambda)
+        {
+            return (contract, propertyValue) =>
+            {
+                MemberInfo member = ReflectionHelper.FindProperty(selectorLambda);
+                ReflectionHelper.SetMemberValue(member, contract, propertyValue);
+                return contract;
+            };
+        }
     }
 }

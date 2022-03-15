@@ -15,19 +15,11 @@ namespace System.CommandLine.PropertyMapBinder
             _propertySetter = setter;
         }
 
-        private Func<TInputModel, TProperty, TInputModel> SelectorToSetter(Expression<Func<TInputModel, TProperty>> selectorLambda){
-            return (contract, propertyValue) =>
-            {
-                MemberInfo member = ReflectionHelper.FindProperty(selectorLambda);
-                ReflectionHelper.SetMemberValue(member, contract, propertyValue);
-                return contract;
-            };
-        }
 
         public SymbolReferencePropertyBinder(Argument<TProperty> argumentRef, Expression<Func<TInputModel, TProperty>> selectorLambda)
         {
             symbolReference = argumentRef;
-            _propertySetter = SelectorToSetter(selectorLambda);
+            _propertySetter = ReflectionHelper.SelectorToSetter(selectorLambda);
         }
 
         public SymbolReferencePropertyBinder(Option<TProperty> optionRef, Func<TInputModel, TProperty, TInputModel> setter)
@@ -39,7 +31,7 @@ namespace System.CommandLine.PropertyMapBinder
         public SymbolReferencePropertyBinder(Option<TProperty> optionRef, Expression<Func<TInputModel, TProperty>> selectorLambda)
         {
             symbolReference = optionRef;
-            _propertySetter = SelectorToSetter(selectorLambda);
+            _propertySetter = ReflectionHelper.SelectorToSetter(selectorLambda);
         }
 
 
