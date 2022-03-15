@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.CommandLine.Invocation;
 using System.Text;
 
-namespace System.CommandLine.PropertyMapBinder
+namespace System.CommandLine.PropertyMapBinder.PropertyBinders
 {
     internal class ConstantPropertyBinder<TInputModel, TProperty> : IPropertyBinder<TInputModel>
     {

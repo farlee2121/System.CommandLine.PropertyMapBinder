@@ -2,7 +2,7 @@ using System.CommandLine.Invocation;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace System.CommandLine.PropertyMapBinder
+namespace System.CommandLine.PropertyMapBinder.PropertyBinders
 {
     public class SymbolNamePropertyBinder<TInputModel, TProperty> : IPropertyBinder<TInputModel>
     {
