@@ -1,4 +1,6 @@
 using System.CommandLine.Invocation;
+using System.CommandLine.PropertyMapBinder.ModelFactories;
+
 namespace System.CommandLine.PropertyMapBinder
 {
     public static partial class ModelFactory

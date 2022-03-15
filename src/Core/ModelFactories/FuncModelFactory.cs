@@ -1,5 +1,5 @@
 using System.CommandLine.Invocation;
-namespace System.CommandLine.PropertyMapBinder
+namespace System.CommandLine.PropertyMapBinder.ModelFactories
 {
     public class FuncModelFactory<TInputModel> : IModelFactory<TInputModel>
     {
