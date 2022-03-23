@@ -4,11 +4,11 @@
 
 ## Motivation / what is this
 The goal is to create an intuitive handler binding experience for [System.CommandLine](https://github.com/dotnet/command-line-api).
-A few goals
+A few sub-goals include
 - intuitive binding of complex types
-- support handler declaraction as a self-contained expression (no reference to symbol instances)
 - blending multiple binding rules for a customizable and consistent binding experience
 - easy extension of the binding pipeline
+- support handler declaraction as a self-contained expression (no reference to symbol instances)
 
 
 ## Examples
@@ -58,7 +58,7 @@ The pipeline executes each binder in the order they are given. This means later 
 
 ### Blended Conventions
 
-The pipeline can handle many approaches binding input. Here's an example of a simple naming convention with an explicit mapping fallback
+The pipeline can handle many approaches to binding input. Here's an example using a simple naming convention with an explicit mapping fallback
 
 ```cs
 rootCommand.Handler = new BinderPipeline<SuchInput>()
@@ -90,10 +90,10 @@ rootCommand.Handler = new BinderPipeline<SuchInput>()
 
 Some models may want to enforce guarantees about data through the constructor, or some fields may not allow modification after initialization.
 
-This can be handled similarly to the core library's `SetHandler`.
+This can be handled similarly to System.Commandline's `SetHandler`.
 
 ```cs
-IModelFactory<SuchInput> modelFactory = ModelFactor.FromSymbolMap((int frequency, string printMe) => new InputModel(frequency, printMe), frequencyOpt, printMeArg);
+IModelFactory<SuchInput> modelFactory = ModelFactory.FromSymbolMap((int frequency, string printMe) => new InputModel(frequency, printMe), frequencyOpt, printMeArg);
 rootCommand.Handler = new BinderPipeline<SuchInput>()
     .ToHandler(SuchHandler, modelFactory);
 ```
@@ -123,7 +123,7 @@ public interface IPropertyBinder<InputModel>
 Input definitions (i.e. options and arguments) can be found in `context.ParserResult.CommandResult.Symbol.Children`
 and values can be fetched by functions like `context.ParseResult.GetValueForOption`.
 
-Examples exist for [symbol name and property path](./Core/PropertyMap.cs) and [simple name conventions](./CliExample/NamingConventionPipelineBinder.cs).
+Examples exist for [symbol name and property path](./src/Core/PropertyBinders) and [simple name conventions](./src/NameConventionBinder/NameConventionBinder.cs).
 
 The other key step is to register extension methods on `BinderPipeline`. The main behaviors to consider
 - the extension should add it's binder to the end of the pipeline (e.g. `pipeline.Add(yourBinder)`)
